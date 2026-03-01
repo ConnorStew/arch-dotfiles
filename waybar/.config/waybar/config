@@ -14,7 +14,7 @@
         "sway/mode",
         "sway/scratchpad",
         "custom/media",
-        "custom/launcher"
+        "custom/launcher",
         "pulseaudio",
         "network"
     ],
