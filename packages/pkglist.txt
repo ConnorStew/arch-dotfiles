@@ -6,7 +6,6 @@ dolphin
 efibootmgr
 ex-vi-compat
 fastfetch
-firefox
 flatpak
 fsarchiver
 git
