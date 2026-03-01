@@ -4,26 +4,19 @@
     font-size: 13px;
 }
 
-/* #### My Stuff #### */
-
-#custom-power {
-    margin-right: 10px;
-}
-
-#custom-launcher {
-    margin-left: 10px;
-}
-
-
-/* #### My Stuff #### */
-
 window#waybar {
     background-color: rgba(43, 48, 59, 0.5);
     border-bottom: 3px solid rgba(100, 114, 125, 0.5);
     color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
+    border-radius: 6px;
 }
+
+window#waybar > box {
+  padding: 6px;
+}
+
 
 window#waybar.hidden {
     opacity: 0.2;
@@ -109,6 +102,7 @@ button:hover {
 #mpd {
     padding: 0 10px;
     color: #ffffff;
+    border-radius: 6px;
 }
 
 #window,
@@ -126,9 +120,9 @@ button:hover {
     margin-right: 0;
 }
 
-/* #clock {
+#clock {
     background-color: #64727D;
-} */
+}
 
 #battery {
     background-color: #ffffff;
