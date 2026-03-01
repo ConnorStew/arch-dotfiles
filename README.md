@@ -47,6 +47,7 @@ kitty +kitten themes --reload-in=all "Cherry"
 See [`workarounds/`](workarounds/) for documented fixes to hardware/driver issues.
 
 - [Xbox Wireless Adapter](workarounds/xbox-wireless-adapter.md) — blacklists `mt76x2u` which incorrectly claims the dongle
+- [Claude Code AUR Symlink](workarounds/claude-code-aur-symlink.md) — AUR install lands in `/usr/bin/`, needs symlink to `~/.local/bin/`
 
 ## Dumping current packages
 
@@ -98,7 +99,17 @@ chmod 600 ~/.ssh/config
 chmod 600 ~/git/arch-dotfiles/ssh/.ssh/config
 ```
 
-### 4. Set ACLs for SDDM
+### 4. Fix Claude Code symlink (AUR install)
+
+The AUR package installs to `/usr/bin/claude` but Claude Code expects `~/.local/bin/claude`:
+
+```bash
+ln -s /usr/bin/claude ~/.local/bin/claude
+```
+
+See [workarounds/claude-code-aur-symlink.md](workarounds/claude-code-aur-symlink.md) for details.
+
+### 5. Set ACLs for SDDM
 
 The `sddm` stow package symlinks files into `/etc/` and `/usr/share/` that point back into your home directory. The `sddm` user (which runs the greeter) cannot follow symlinks into `/home/connor` by default, so ACLs are needed to grant it read access to just the relevant files.
 
