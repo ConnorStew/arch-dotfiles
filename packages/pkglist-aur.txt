@@ -1,5 +1,7 @@
 brave-bin
 claude-code
+nordvpn-gui-bin
+plex-media-server
 sddm-astronaut-theme
 visual-studio-code-bin
 yay
