@@ -1,5 +1,6 @@
 brave-bin
 claude-code
+sddm-astronaut-theme
 visual-studio-code-bin
 yay
 yay-debug

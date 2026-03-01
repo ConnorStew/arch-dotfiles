@@ -38,6 +38,7 @@ steam
 stow
 unzip
 waybar
+weston
 woff2-font-awesome
 wofi
 xdg-desktop-portal-gtk
