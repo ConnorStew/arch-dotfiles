@@ -207,7 +207,7 @@
     "custom/launcher": {
         "format": "\uf0c9",
         "tooltip": "Launch App",
-        "on-click": "/home/connor/.config/hypr/wofi-cursor.sh top_left",
+        "on-click": "/home/connor/.config/hypr/wofi-wrapper.sh",
         "internal": 3600
     }
 }

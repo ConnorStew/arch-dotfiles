@@ -1,5 +1,17 @@
 # Arch Dotfiles & Packages
 
+## Removing a Stowed File
+
+1. Delete the file from the repo
+2. Remove the dangling symlink from your home directory
+3. Restow the package to verify it's clean
+
+```bash
+rm hypr/.config/hypr/some-file.sh
+rm ~/.config/hypr/some-file.sh
+stow --target=/home/connor hypr -v
+```
+
 ## Stowing New Files
 
 Simulate:
