@@ -18,6 +18,7 @@ jq
 kitty
 linux
 linux-firmware
+linux-headers
 lvm2
 man-db
 man-pages

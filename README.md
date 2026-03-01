@@ -30,6 +30,12 @@ kitty +kitten themes --reload-in=all "Cherry"
 
 `current-theme.conf` is symlinked via stow, so theme changes are automatically reflected in the repo.
 
+## Workarounds
+
+See [`workarounds/`](workarounds/) for documented fixes to hardware/driver issues.
+
+- [Xbox Wireless Adapter](workarounds/xbox-wireless-adapter.md) — blacklists `mt76x2u` which incorrectly claims the dongle
+
 ## Dumping current packages
 
 Run `dump.sh` to update the package lists:
@@ -65,6 +71,7 @@ yay -S --needed - < ~/git/arch-dotfiles/packages/pkglist-aur.txt
 cd ~/git/arch-dotfiles
 stow bash hypr waybar kitty wofi
 sudo stow --target=/ sddm
+sudo stow --target=/ xone
 ```
 
 ### 4. Set ACLs for SDDM

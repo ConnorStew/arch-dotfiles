@@ -12,6 +12,9 @@ Arch Linux + Hyprland setup. All packages symlinked via stow.
 - `sddm/` → `/etc/sddm.conf.d/`, `/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop`, `/var/lib/sddm/.config/weston.ini`
   - Requires `sudo stow --target=/ sddm`
   - Requires ACLs so the `sddm` user can read symlink targets — see README step 4
+- `xone/` → `/etc/modprobe.d/xone.conf`
+  - Requires `sudo stow --target=/ xone`
+  - Blacklists `mt76x2u` so the Xbox wireless adapter is claimed by `xone-dongle` instead
 
 ## Package Lists (`packages/`)
 

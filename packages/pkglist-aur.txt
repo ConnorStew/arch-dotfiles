@@ -4,5 +4,6 @@ nordvpn-gui-bin
 plex-media-server
 sddm-astronaut-theme
 visual-studio-code-bin
+xone-dkms-git
 yay
 yay-debug
