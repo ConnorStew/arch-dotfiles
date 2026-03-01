@@ -7,32 +7,32 @@
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        // "sway/workspaces",
-        // "sway/mode",
-        // "sway/scratchpad",
-        // "custom/media"
+        "sway/workspaces",
+        "sway/mode",
+        "sway/scratchpad",
+        "custom/media",
         "custom/launcher"
     ],
     "modules-center": [
+        "sway/window",
         "wlr/taskbar"
-        //"sway/window"
     ],
     "modules-right": [
-        // "mpd",
-        // "idle_inhibitor",
-        // "pulseaudio",
-        // "network",
-        // "power-profiles-daemon",
-        // "cpu",
-        // "memory",
-        // "temperature",
-        // "backlight",
-        // "keyboard-state",
-        // "sway/language",
-        // "battery",
-        // "battery#bat2",
+        "mpd",
+        "idle_inhibitor",
+        "pulseaudio",
+        "network",
+        "power-profiles-daemon",
+        "cpu",
+        "memory",
+        "temperature",
+        "backlight",
+        "keyboard-state",
+        "sway/language",
+        "battery",
+        "battery#bat2",
         "clock",
-        // "tray",
+        "tray",
         "custom/power"
     ],
     // Modules configuration
@@ -207,7 +207,7 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "custom/power": {
-        "format" : "\uf011",
+        "format" : "\u23fb",
 		"tooltip": false,
 		"menu": "on-click",
 		"menu-file": "$HOME/.config/waybar/power_menu.xml",
