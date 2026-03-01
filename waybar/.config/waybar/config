@@ -10,15 +10,15 @@
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "hyprland/workspaces",
         "custom/launcher",
         "custom/media",
         "pulseaudio",
         "network"
     ],
     "modules-center": [
-        "hyprland/window",
-        "wlr/taskbar"
+        "hyprland/workspaces"
+        //"hyprland/window",
+        //"wlr/taskbar"
     ],
     "modules-right": [
         "mpd",
