@@ -1,5 +1,19 @@
 # Arch Dotfiles & Packages
 
+## Stowing New Files
+
+Simulate:
+
+```bash
+stow --target=/home/connor hypr -v --simulate
+```
+
+Apply:
+
+```bash
+stow  --target=/home/connor hypr -v
+```
+
 ## Kitty Theme
 
 Browse and set themes interactively:
