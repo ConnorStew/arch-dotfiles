@@ -12,6 +12,14 @@ All packages are symlinked via `stow --adopt`:
 - `kitty/` → `~/.config/kitty/`
 - `wofi/` → `~/.config/wofi/`
 
+## Package Lists
+
+Stored in `packages/`:
+- `pkglist.txt` — native packages
+- `pkglist-aur.txt` — AUR packages
+- `dump.sh` — regenerates both lists
+- `README.md` (repo root) — restore instructions for a new machine
+
 ## Repo Structure
 ```
 arch-dotfiles/
