@@ -3,6 +3,7 @@ claude-code
 nordvpn-gui-bin
 plex-media-server
 sddm-astronaut-theme
+spotify
 visual-studio-code-bin
 xone-dkms-git
 yay

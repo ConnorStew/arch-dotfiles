@@ -33,6 +33,8 @@ openssh
 os-prober
 otf-font-awesome
 papirus-icon-theme
+pavucontrol
+pipewire-pulse
 reflector
 sddm
 steam
