@@ -86,6 +86,18 @@ sudo stow --target=/ sddm
 sudo stow --target=/ xone
 ```
 
+### 3a. Stow SSH config
+
+SSH requires strict permissions or it will refuse to use the files:
+
+```bash
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+stow --target=/home/connor ssh
+chmod 600 ~/.ssh/config
+chmod 600 ~/git/arch-dotfiles/ssh/.ssh/config
+```
+
 ### 4. Set ACLs for SDDM
 
 The `sddm` stow package symlinks files into `/etc/` and `/usr/share/` that point back into your home directory. The `sddm` user (which runs the greeter) cannot follow symlinks into `/home/connor` by default, so ACLs are needed to grant it read access to just the relevant files.

@@ -2,6 +2,10 @@
 
 Arch Linux + Hyprland setup. All packages symlinked via stow.
 
+## General Principles
+
+All config files should be symlinked via stow. When adding or editing any config file, check whether it belongs in an existing stow package or needs a new one created.
+
 ## Stow Packages
 
 - `bash/` → `~/.bashrc`, `~/.bash_profile`
@@ -9,6 +13,7 @@ Arch Linux + Hyprland setup. All packages symlinked via stow.
 - `waybar/` → `~/.config/waybar/`
 - `kitty/` → `~/.config/kitty/`
 - `wofi/` → `~/.config/wofi/`
+- `ssh/` → `~/.ssh/config`
 - `sddm/` → `/etc/sddm.conf.d/`, `/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop`, `/var/lib/sddm/.config/weston.ini`
   - Requires `sudo stow --target=/ sddm`
   - Requires ACLs so the `sddm` user can read symlink targets — see README step 4
