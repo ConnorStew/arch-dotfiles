@@ -9,7 +9,7 @@ Arch Linux + Hyprland setup. All packages symlinked via stow.
 - `waybar/` → `~/.config/waybar/`
 - `kitty/` → `~/.config/kitty/`
 - `wofi/` → `~/.config/wofi/`
-- `sddm/` → `/etc/sddm.conf.d/`, `/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop`
+- `sddm/` → `/etc/sddm.conf.d/`, `/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop`, `/var/lib/sddm/.config/weston.ini`
   - Requires `sudo stow --target=/ sddm`
   - Requires ACLs so the `sddm` user can read symlink targets — see README step 4
 
