@@ -22,20 +22,14 @@ git clone https://aur.archlinux.org/yay.git
 cd yay && makepkg -si
 ```
 
-### 2. Clone the dotfiles repo
-
-```bash
-git clone <your-repo-url> ~/git/arch-dotfiles
-```
-
-### 3. Install packages
+### 2. Install packages
 
 ```bash
 sudo pacman -S --needed - < ~/git/arch-dotfiles/packages/pkglist.txt
 yay -S --needed - < ~/git/arch-dotfiles/packages/pkglist-aur.txt
 ```
 
-### 4. Symlink dotfiles with stow
+### 3. Symlink dotfiles with stow
 
 ```bash
 cd ~/git/arch-dotfiles
