@@ -50,4 +50,22 @@ yay -S --needed - < ~/git/arch-dotfiles/packages/pkglist-aur.txt
 ```bash
 cd ~/git/arch-dotfiles
 stow bash hypr waybar kitty wofi
+sudo stow --target=/ sddm
 ```
+
+### 4. Set ACLs for SDDM
+
+The `sddm` stow package symlinks files into `/etc/` and `/usr/share/` that point back into your home directory. The `sddm` user (which runs the greeter) cannot follow symlinks into `/home/connor` by default, so ACLs are needed to grant it read access to just the relevant files.
+
+```bash
+setfacl -m u:sddm:x /home/connor
+setfacl -m u:sddm:x /home/connor/git
+setfacl -m u:sddm:x /home/connor/git/arch-dotfiles
+setfacl -R -m u:sddm:rX /home/connor/git/arch-dotfiles/sddm
+setfacl -R -m d:u:sddm:rX /home/connor/git/arch-dotfiles/sddm
+setfacl -m u:sddm:x /home/connor/Pictures
+setfacl -m u:sddm:x /home/connor/Pictures/Wallpapers
+setfacl -m u:sddm:r /home/connor/Pictures/Wallpapers/forest.jpg
+```
+
+> `x` on the directories allows traversal without listing. `rX` on the sddm package grants read on files and traverse on subdirectories. The `d:` prefix sets default ACLs so new files added to the sddm package inherit the same permissions automatically. The wallpaper ACL avoids duplicating the file for SDDM.
