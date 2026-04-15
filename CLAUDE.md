@@ -20,6 +20,10 @@ All config files should be symlinked via stow. When adding or editing any config
 - `xone/` → `/etc/modprobe.d/xone.conf`
   - Requires `sudo stow --target=/ xone`
   - Blacklists `mt76x2u` so the Xbox wireless adapter is claimed by `xone-dongle` instead
+- `discord-update/` → `/etc/systemd/system/discord-update.{service,timer}`
+  - Requires `sudo stow --target=/ discord-update`
+  - Runs `pacman -Sy discord` 30s after boot
+  - Enable with: `sudo systemctl enable --now discord-update.timer`
 
 ## Package Lists (`packages/`)
 

@@ -85,9 +85,17 @@ cd ~/git/arch-dotfiles
 stow bash hypr waybar kitty wofi
 sudo stow --target=/ sddm
 sudo stow --target=/ xone
+sudo stow --target=/ discord-update
 ```
 
-### 3a. Stow SSH config
+### 3a. Enable Discord auto-update timer
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now discord-update.timer
+```
+
+### 3b. Stow SSH config
 
 SSH requires strict permissions or it will refuse to use the files:
 
