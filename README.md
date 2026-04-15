@@ -1,5 +1,13 @@
 # Arch Dotfiles & Packages
 
+## Scripts (`scripts/`)
+
+Useful utility scripts — not stowed, run manually.
+
+| Script | Description |
+|--------|-------------|
+| `sync-notes.sh` | Bidirectional rclone sync for Obsidian notes and DnD folder to Google Drive. Does a dry run first with confirmation. Usage: `./scripts/sync-notes.sh [obsidian\|dnd\|both]` |
+
 ## Removing a Stowed File
 
 1. Delete the file from the repo
