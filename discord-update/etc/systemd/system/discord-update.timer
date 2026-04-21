@@ -2,7 +2,7 @@
 Description=Auto-update Discord on boot
 
 [Timer]
-OnBootSec=30s
+OnBootSec=5s
 
 [Install]
 WantedBy=timers.target
