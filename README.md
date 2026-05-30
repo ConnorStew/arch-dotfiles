@@ -96,6 +96,16 @@ sudo stow --target=/ xone
 sudo stow --target=/ discord-update
 ```
 
+### 3a. Install mako (notification daemon) and arch-update
+
+`mako` is required for desktop notifications. `arch-update` uses it to notify about available package updates:
+
+```bash
+sudo pacman -S mako arch-update
+```
+
+Both are autostarted via `hyprland.conf` (`exec-once = mako`).
+
 ### 3a. Enable Discord auto-update timer
 
 ```bash

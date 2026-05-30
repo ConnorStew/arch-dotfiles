@@ -1,3 +1,4 @@
+arch-update 3.19.7-1
 brave-bin 1:1.89.137-1
 butler 15.26.1-1
 claude-code 2.1.113-1

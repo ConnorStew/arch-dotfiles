@@ -21,6 +21,7 @@ linux 6.19.8.arch1-1
 linux-firmware 20260309-1
 linux-headers 6.19.8.arch1-1
 lvm2 2.03.39-1
+mako 1.11.0-1
 man-db 2.13.1-1
 man-pages 6.17-1
 nano 8.7.1-1
