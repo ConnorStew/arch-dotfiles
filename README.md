@@ -117,7 +117,12 @@ sudo stow --target=/ discord-update
 sudo pacman -S mako arch-update
 ```
 
-Both are autostarted via `hyprland.conf` (`exec-once = mako`).
+Mako is autostarted via `hyprland.conf` (`exec-once = mako`). Enable arch-update's timer and tray icon:
+
+```bash
+systemctl --user enable --now arch-update.timer
+systemctl --user enable --now arch-update-tray.service
+```
 
 ### 3a. Enable Discord auto-update timer
 
