@@ -1,10 +1,11 @@
-brave-bin
-claude-code
-nordvpn-gui-bin
-plex-media-server
-sddm-astronaut-theme
-spotify
-visual-studio-code-bin
-xone-dkms-git
-yay
-yay-debug
+brave-bin 1:1.89.137-1
+butler 15.26.1-1
+claude-code 2.1.113-1
+nordvpn-gui-bin 4.4.0-1
+plex-media-server 1.43.0.10492-1
+sddm-astronaut-theme 80.d73842c-1
+spotify 1:1.2.82.428-1
+visual-studio-code-bin 1.109.5-1
+xone-dkms-git 0.5.7.r0.ga16304c-1
+yay 12.5.7-1
+yay-debug 12.5.7-1

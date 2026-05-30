@@ -3,8 +3,8 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-pacman -Qqen > "$SCRIPT_DIR/pkglist.txt"
-pacman -Qqem > "$SCRIPT_DIR/pkglist-aur.txt"
+pacman -Qen > "$SCRIPT_DIR/pkglist.txt"
+pacman -Qem > "$SCRIPT_DIR/pkglist-aur.txt"
 
 echo "Saved:"
 echo "  $(wc -l < "$SCRIPT_DIR/pkglist.txt") native packages -> pkglist.txt"
