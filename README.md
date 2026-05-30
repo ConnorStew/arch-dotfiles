@@ -57,6 +57,19 @@ See [`workarounds/`](workarounds/) for documented fixes to hardware/driver issue
 - [Xbox Wireless Adapter](workarounds/xbox-wireless-adapter.md) — blacklists `mt76x2u` which incorrectly claims the dongle
 - [Claude Code AUR Symlink](workarounds/claude-code-aur-symlink.md) — AUR install lands in `/usr/bin/`, needs symlink to `~/.local/bin/`
 
+## Backups before major updates
+
+For large updates (kernel, NVIDIA, GCC major versions), take a Timeshift snapshot first:
+
+```bash
+sudo pacman -S timeshift
+sudo timeshift --create --comments "pre-update description"
+```
+
+A same-drive snapshot is fine for guarding against a bad update. Delete it once the system is confirmed stable. For hardware failure protection, use rclone to back up to Google Drive (see `scripts/sync-notes.sh` as a reference).
+
+When updating kernel + NVIDIA + xone-dkms, always update all three together and reboot immediately after.
+
 ## Dumping current packages
 
 Run `dump.sh` to update the package lists:
