@@ -20,6 +20,7 @@ All config files should be symlinked via stow. When adding or editing any config
 - `xone/` → `/etc/modprobe.d/xone.conf`
   - Requires `sudo stow --target=/ xone`
   - Blacklists `mt76x2u` so the Xbox wireless adapter is claimed by `xone-dongle` instead
+- `reflector/` — NOT stowed. The reflector systemd service uses `ProtectHome=true` which blocks symlinks into `/home`. Config is tracked in the repo for version control but deployed as a plain copy (see README).
 - `discord-update/` → `/etc/systemd/system/discord-update.{service,timer}`
   - Requires `sudo stow --target=/ discord-update`
   - Runs `pacman -Sy discord` 30s after boot

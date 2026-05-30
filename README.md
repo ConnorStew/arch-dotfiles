@@ -103,7 +103,23 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now discord-update.timer
 ```
 
-### 3b. Stow SSH config
+### 3b. Deploy reflector config and enable mirror auto-update
+
+The reflector service uses `ProtectHome=true` so symlinks into `/home` don't work — deploy as a plain copy instead:
+
+```bash
+sudo cp ~/git/arch-dotfiles/reflector/etc/xdg/reflector/reflector.conf /etc/xdg/reflector/reflector.conf
+sudo chown root:root /etc/xdg/reflector/reflector.conf
+sudo systemctl enable --now reflector.timer
+```
+
+To run immediately:
+
+```bash
+sudo systemctl start reflector.service
+```
+
+### 3c. Stow SSH config
 
 SSH requires strict permissions or it will refuse to use the files:
 
