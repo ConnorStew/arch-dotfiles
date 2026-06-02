@@ -37,7 +37,6 @@ nvidia-utils 610.43.02-2
 obs-studio 32.1.2-4
 obsidian 1.12.7-2
 okular 26.04.1-1
-openbsd-netcat 1.238_1-1
 openssh 10.3p1-1
 os-prober 1.84-1
 otf-font-awesome 7.2.0-1
@@ -55,6 +54,7 @@ timeshift 25.12.4-1
 ttf-droid 20121017-11
 unzip 6.0-23
 virt-install 5.1.0-3
+virt-manager 5.1.0-3
 waybar 0.15.0-2
 weston 15.0.1-1
 woff2-font-awesome 7.2.0-1
