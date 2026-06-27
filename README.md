@@ -106,6 +106,7 @@ bash ~/git/arch-config/packages/dump.sh
 ### Notes
 
 - When updating kernel + NVIDIA + `xone-dkms`, always update all three together and reboot immediately after.
+- Reboot after any update that includes `libdrm`, `mesa`, `nvidia`, or the kernel — these touch the GPU/display stack and need a clean reload.
 - For hardware failure protection, use rclone to back up to Google Drive (see `scripts/sync-notes.sh`).
 
 ## Dumping current packages
