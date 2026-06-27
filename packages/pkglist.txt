@@ -5,6 +5,8 @@ breeze-gtk 6.6.5-1
 cloud-image-utils 0.33-3
 discord 1:1.0.140-1
 dnsmasq 2.92.rel2-2
+docker 1:29.5.2-1
+docker-compose 5.1.4-1
 dolphin 26.04.1-1
 efibootmgr 18-4
 ex-vi-compat 2-1
@@ -31,6 +33,7 @@ nano 9.0-1
 networkmanager 1.56.1-1
 nodejs 26.2.0-1
 npm 11.14.1-1
+nvidia-container-toolkit 1.19.1-1
 nvidia-open 610.43.02-1
 nvidia-settings 610.43.02-1
 nvidia-utils 610.43.02-2
