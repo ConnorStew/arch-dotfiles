@@ -57,18 +57,56 @@ See [`workarounds/`](workarounds/) for documented fixes to hardware/driver issue
 - [Xbox Wireless Adapter](workarounds/xbox-wireless-adapter.md) — blacklists `mt76x2u` which incorrectly claims the dongle
 - [Claude Code AUR Symlink](workarounds/claude-code-aur-symlink.md) — AUR install lands in `/usr/bin/`, needs symlink to `~/.local/bin/`
 
-## Backups before major updates
+## Full System Update
 
-For large updates (kernel, NVIDIA, GCC major versions), take a Timeshift snapshot first:
+### 1. Snapshot with Timeshift
+
+Always take a snapshot before a full update, especially if the kernel, NVIDIA, or GCC is involved:
 
 ```bash
-sudo pacman -S timeshift
-sudo timeshift --create --comments "pre-update description"
+sudo timeshift --create --comments "Before full system update"
 ```
 
-A same-drive snapshot is fine for guarding against a bad update. Delete it once the system is confirmed stable. For hardware failure protection, use rclone to back up to Google Drive (see `scripts/sync-notes.sh` as a reference).
+Delete it once the system is confirmed stable after reboot.
 
-When updating kernel + NVIDIA + xone-dkms, always update all three together and reboot immediately after.
+### 2. Update native packages
+
+```bash
+sudo pacman -Syu
+```
+
+### 3. Check and update AUR packages
+
+Before updating, review the PKGBUILDs for anything suspicious — especially check that sources download from expected upstream URLs with matching checksums:
+
+```bash
+yay -Syu
+```
+
+yay will show diffs for changed PKGBUILDs. Review before confirming.
+
+### 4. Update Flatpak apps
+
+```bash
+flatpak update
+```
+
+### 5. Update npm globals
+
+```bash
+sudo npm update -g
+```
+
+### 6. Dump updated package lists
+
+```bash
+bash ~/git/arch-config/packages/dump.sh
+```
+
+### Notes
+
+- When updating kernel + NVIDIA + `xone-dkms`, always update all three together and reboot immediately after.
+- For hardware failure protection, use rclone to back up to Google Drive (see `scripts/sync-notes.sh`).
 
 ## Dumping current packages
 
