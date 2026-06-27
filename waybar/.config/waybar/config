@@ -21,6 +21,7 @@
         //"wlr/taskbar"
     ],
     "modules-right": [
+        "custom/claudebar",
         "mpd",
         "idle_inhibitor",
         "power-profiles-daemon",
@@ -204,6 +205,14 @@
             "hibernate": "systemctl hibernate",
             "logout": "hyprctl dispatch exit"
         }
+    },
+    "custom/claudebar": {
+        "exec": "claudebar",
+        "return-type": "json",
+        "interval": 300,
+        "signal": 13,
+        "tooltip": true,
+        "on-click": "xdg-open https://claude.ai/settings/usage"
     },
     "custom/launcher": {
         "format": "\uf0c9",

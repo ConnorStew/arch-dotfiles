@@ -1,5 +1,6 @@
 arch-update 3.19.7-1
 butler 15.27.0-1
+claudebar 0.6.0-1
 nordvpn-gui-bin 5.0.0-1
 sddm-astronaut-theme 80.d73842c-1
 xone-dkms-git 0.5.8.r0.gf2aa9fe-2

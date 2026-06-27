@@ -31,6 +31,15 @@ All config files should be symlinked via stow. When adding or editing any config
   - Runs `pacman -Sy discord` 30s after boot
   - Enable with: `sudo systemctl enable --now discord-update.timer`
 
+## Flatpak Notes
+
+- VSCode terminal runs inside the Flatpak sandbox and can't see host binaries (`pacman`, `flatpak`, etc.)
+  - Fixed via `flatpak-spawn --host` in `~/.var/app/com.visualstudio.code/config/Code/User/settings.json`
+  - This file is **not stowed** (lives under `~/.var/app/`)
+- GTK native dialogs (e.g. file pickers, sync confirmations) default to light theme in Flatpak apps
+  - Fixed per-app with: `flatpak override --user --env=GTK_THEME=Adwaita:dark <app-id>`
+  - Applied to: `com.visualstudio.code`, `com.brave.Browser`, `com.spotify.Client`
+
 ## Package Lists (`packages/`)
 
 - `pkglist.txt` — native packages
