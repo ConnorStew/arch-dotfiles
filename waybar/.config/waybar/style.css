@@ -133,7 +133,8 @@ button:hover {
 }
 
 #custom-power {
-    font-size: 21px;
+    font-size: 13px;
+    padding-top: 4px;
 }
 
 #battery.charging, #battery.plugged {
