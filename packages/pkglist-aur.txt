@@ -1,8 +1,8 @@
-arch-update 3.19.7-1
+arch-update 3.20.2-1
 butler 15.27.0-1
 claudebar 0.6.0-1
-nordvpn-gui-bin 5.0.0-1
+nordvpn-gui-bin 5.1.0-1
 sddm-astronaut-theme 80.d73842c-1
+visual-studio-code-bin 1.126.0-1
 xone-dkms-git 0.5.8.r0.gf2aa9fe-2
-yay 12.5.7-1
-yay-debug 12.5.7-1
+yay 13.0.1-1

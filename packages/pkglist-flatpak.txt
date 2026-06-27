@@ -1,4 +1,3 @@
 com.brave.Browser	1.91.180
 com.spotify.Client	1.2.92.147.g5b8f9367
-com.visualstudio.code	1.126.0
 org.gnome.Calculator	50.0
