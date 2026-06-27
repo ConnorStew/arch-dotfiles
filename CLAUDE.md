@@ -13,6 +13,7 @@ All config files should be symlinked via stow. When adding or editing any config
 - `waybar/` → `~/.config/waybar/`
 - `kitty/` → `~/.config/kitty/`
 - `wofi/` → `~/.config/wofi/`
+- `mako/` → `~/.config/mako/`
 - `ssh/` → `~/.ssh/config`
 - `sddm/` → `/etc/sddm.conf.d/`, `/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop`, `/var/lib/sddm/.config/weston.ini`
   - Requires `sudo stow --target=/ sddm`
