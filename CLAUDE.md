@@ -30,6 +30,8 @@ All config files should be symlinked via stow. When adding or editing any config
   - Requires `sudo stow --target=/ discord-update`
   - Runs `pacman -Sy discord` 30s after boot
   - Enable with: `sudo systemctl enable --now discord-update.timer`
+- `alsa/` → `~/.asoundrc`
+  - Forces ALSA's default PCM to `type pipewire`, overriding `alsa-plugins`' `99-pulseaudio-default.conf` which otherwise wins the `pipewire-pulse` vs `alsa-plugins` default-device race (see `workarounds/voice-mode-alsa-dsnoop.md`)
 
 ## Flatpak Notes
 

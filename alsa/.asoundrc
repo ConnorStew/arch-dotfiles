@@ -1,0 +1,9 @@
+pcm.!default {
+    type pipewire
+    hint.show on
+    hint.description "Default Audio Device (PipeWire)"
+}
+
+ctl.!default {
+    type pipewire
+}
