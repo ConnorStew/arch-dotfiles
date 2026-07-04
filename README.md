@@ -248,6 +248,13 @@ setfacl -m u:sddm:r /home/connor/Pictures/Wallpapers/forest.jpg
 
 > `x` on the directories allows traversal without listing. `rX` on the sddm package grants read on files and traverse on subdirectories. The `d:` prefix sets default ACLs so new files added to the sddm package inherit the same permissions automatically. The wallpaper ACL avoids duplicating the file for SDDM.
 
+Stowing the `sddm` package only symlinks its config files — it doesn't enable the service or set the graphical boot target. Do both:
+
+```bash
+sudo systemctl enable sddm
+sudo systemctl set-default graphical.target
+```
+
 ### 8. Flatpak apps and fixups
 
 Install the Flatpak apps from the dumped list, then apply the following fixups — both are lost on a fresh install since they live outside this repo.
