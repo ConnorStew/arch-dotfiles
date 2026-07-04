@@ -1,3 +1,6 @@
+alsa-utils 1.2.16-1
+ansible 14.1.0-1
+ansible-lint 26.4.0-1
 aws-cli-v2 2.34.32-1
 base 3-3
 base-devel 1-2
@@ -51,8 +54,10 @@ rclone 1.74.3-1
 reflector 2023-5
 rsync 3.4.4-1
 sddm 0.21.0-7
+sshpass 1.10-2
 steam 1.0.0.86-1
 stow 2.4.1-1
+testdisk 7.2-3
 timeshift 25.12.4-1
 ttf-droid 20121017-11
 ttf-jetbrains-mono-nerd 3.4.0-2
