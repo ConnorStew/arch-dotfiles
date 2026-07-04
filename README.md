@@ -250,7 +250,12 @@ setfacl -m u:sddm:r /home/connor/Pictures/Wallpapers/forest.jpg
 
 ### 8. Flatpak apps and fixups
 
-Install the Flatpak apps you use (VSCode, Brave, Spotify, etc.), then apply the following fixups — both are lost on a fresh install since they live outside this repo.
+Install the Flatpak apps from the dumped list, then apply the following fixups — both are lost on a fresh install since they live outside this repo.
+
+```bash
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+awk '{print $1}' ~/git/arch-config/packages/pkglist-flatpak.txt | xargs -I{} flatpak install -y flathub {}
+```
 
 Let VSCode's terminal see host binaries (`pacman`, `flatpak`, etc.) from inside the Flatpak sandbox by adding `flatpak-spawn --host` wrapping in `~/.var/app/com.visualstudio.code/config/Code/User/settings.json`.
 
