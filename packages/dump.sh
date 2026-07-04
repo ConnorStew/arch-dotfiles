@@ -3,8 +3,8 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-pacman -Qen > "$SCRIPT_DIR/pkglist.txt"
-pacman -Qem > "$SCRIPT_DIR/pkglist-aur.txt"
+pacman -Qenq > "$SCRIPT_DIR/pkglist.txt"
+pacman -Qemq > "$SCRIPT_DIR/pkglist-aur.txt"
 flatpak list --app --columns=application,version > "$SCRIPT_DIR/pkglist-flatpak.txt"
 npm list -g --depth=0 --parseable 2>/dev/null | tail -n +2 | xargs -I{} basename {} > "$SCRIPT_DIR/pkglist-npm.txt"
 
