@@ -54,6 +54,7 @@ papirus-icon-theme 20250501-1
 pavucontrol 1:6.2-1
 pipewire-pulse 1:1.6.7-1
 qemu-full 11.0.1-1
+qt6ct 0.11-7
 rclone 1.74.3-1
 reflector 2023-5
 rsync 3.4.4-1

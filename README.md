@@ -114,7 +114,7 @@ bash ~/git/arch-config/packages/dump.sh
 Run `dump.sh` to update the package lists:
 
 ```bash
-~/git/arch-dotfiles/packages/dump.sh
+~/git/arch-config/packages/dump.sh
 ```
 
 This generates:
@@ -123,7 +123,13 @@ This generates:
 
 ## Restoring on a new machine
 
-### 1. Install yay (AUR helper)
+### 1. Clone the repo
+
+```bash
+git clone git@github.com:ConnorStew/arch-config.git ~/git/arch-config
+```
+
+### 2. Install yay (AUR helper)
 
 ```bash
 sudo pacman -S --needed git base-devel
@@ -131,51 +137,45 @@ git clone https://aur.archlinux.org/yay.git
 cd yay && makepkg -si
 ```
 
-### 2. Install packages
+### 3. Install packages
 
 ```bash
-sudo pacman -S --needed - < ~/git/arch-dotfiles/packages/pkglist.txt
-yay -S --needed - < ~/git/arch-dotfiles/packages/pkglist-aur.txt
+sudo pacman -S --needed - < ~/git/arch-config/packages/pkglist.txt
+yay -S --needed - < ~/git/arch-config/packages/pkglist-aur.txt
 ```
 
-### 3. Symlink dotfiles with stow
+### 4. Symlink dotfiles with stow
 
 ```bash
-cd ~/git/arch-dotfiles
-stow bash hypr waybar kitty wofi mimeapps
+cd ~/git/arch-config
+stow bash hypr waybar kitty wofi mimeapps mako alsa claude
 sudo stow --target=/ sddm
 sudo stow --target=/ xone
 sudo stow --target=/ discord-update
 ```
 
-### 3a. Install mako (notification daemon) and arch-update
+### 4a. Enable arch-update's timer and tray icon
 
-`mako` is required for desktop notifications. `arch-update` uses it to notify about available package updates:
-
-```bash
-sudo pacman -S mako arch-update
-```
-
-Mako is autostarted via `hyprland.conf` (`exec-once = mako`). Enable arch-update's timer and tray icon:
+`mako` (notification daemon) and `arch-update` are both installed by step 3. Mako is autostarted via `hyprland.conf` (`exec-once = mako`); `arch-update` uses it to notify about available package updates. Enable arch-update's timer and tray icon:
 
 ```bash
 systemctl --user enable --now arch-update.timer
 systemctl --user enable --now arch-update-tray.service
 ```
 
-### 3a. Enable Discord auto-update timer
+### 4b. Enable Discord auto-update timer
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now discord-update.timer
 ```
 
-### 3b. Deploy reflector config and enable mirror auto-update
+### 4c. Deploy reflector config and enable mirror auto-update
 
 The reflector service uses `ProtectHome=true` so symlinks into `/home` don't work — deploy as a plain copy instead:
 
 ```bash
-sudo cp ~/git/arch-dotfiles/reflector/etc/xdg/reflector/reflector.conf /etc/xdg/reflector/reflector.conf
+sudo cp ~/git/arch-config/reflector/etc/xdg/reflector/reflector.conf /etc/xdg/reflector/reflector.conf
 sudo chown root:root /etc/xdg/reflector/reflector.conf
 sudo systemctl enable --now reflector.timer
 ```
@@ -186,7 +186,7 @@ To run immediately:
 sudo systemctl start reflector.service
 ```
 
-### 3c. Stow SSH config
+### 4d. Stow SSH config
 
 SSH requires strict permissions or it will refuse to use the files:
 
@@ -195,10 +195,10 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 stow --target=/home/connor ssh
 chmod 600 ~/.ssh/config
-chmod 600 ~/git/arch-dotfiles/ssh/.ssh/config
+chmod 600 ~/git/arch-config/ssh/.ssh/config
 ```
 
-### 4. Fix Claude Code symlink (AUR install)
+### 5. Fix Claude Code symlink (AUR install)
 
 The AUR package installs to `/usr/bin/claude` but Claude Code expects `~/.local/bin/claude`:
 
@@ -208,19 +208,33 @@ ln -s /usr/bin/claude ~/.local/bin/claude
 
 See [workarounds/claude-code-aur-symlink.md](workarounds/claude-code-aur-symlink.md) for details.
 
-### 5. Set ACLs for SDDM
+### 6. Set ACLs for SDDM
 
 The `sddm` stow package symlinks files into `/etc/` and `/usr/share/` that point back into your home directory. The `sddm` user (which runs the greeter) cannot follow symlinks into `/home/connor` by default, so ACLs are needed to grant it read access to just the relevant files.
 
 ```bash
 setfacl -m u:sddm:x /home/connor
 setfacl -m u:sddm:x /home/connor/git
-setfacl -m u:sddm:x /home/connor/git/arch-dotfiles
-setfacl -R -m u:sddm:rX /home/connor/git/arch-dotfiles/sddm
-setfacl -R -m d:u:sddm:rX /home/connor/git/arch-dotfiles/sddm
+setfacl -m u:sddm:x /home/connor/git/arch-config
+setfacl -R -m u:sddm:rX /home/connor/git/arch-config/sddm
+setfacl -R -m d:u:sddm:rX /home/connor/git/arch-config/sddm
 setfacl -m u:sddm:x /home/connor/Pictures
 setfacl -m u:sddm:x /home/connor/Pictures/Wallpapers
 setfacl -m u:sddm:r /home/connor/Pictures/Wallpapers/forest.jpg
 ```
 
 > `x` on the directories allows traversal without listing. `rX` on the sddm package grants read on files and traverse on subdirectories. The `d:` prefix sets default ACLs so new files added to the sddm package inherit the same permissions automatically. The wallpaper ACL avoids duplicating the file for SDDM.
+
+### 7. Flatpak apps and fixups
+
+Install the Flatpak apps you use (VSCode, Brave, Spotify, etc.), then apply the following fixups — both are lost on a fresh install since they live outside this repo.
+
+Let VSCode's terminal see host binaries (`pacman`, `flatpak`, etc.) from inside the Flatpak sandbox by adding `flatpak-spawn --host` wrapping in `~/.var/app/com.visualstudio.code/config/Code/User/settings.json`.
+
+Fix GTK native dialogs defaulting to light theme in Flatpak apps:
+
+```bash
+flatpak override --user --env=GTK_THEME=Adwaita:dark com.visualstudio.code
+flatpak override --user --env=GTK_THEME=Adwaita:dark com.brave.Browser
+flatpak override --user --env=GTK_THEME=Adwaita:dark com.spotify.Client
+```
