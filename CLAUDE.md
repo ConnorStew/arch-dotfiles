@@ -30,6 +30,9 @@ All config files should be symlinked via stow. When adding or editing any config
   - Requires `sudo stow --target=/ discord-update`
   - Runs `pacman -Sy discord` 30s after boot
   - Enable with: `sudo systemctl enable --now discord-update.timer`
+- `mimeapps/` → `~/.config/mimeapps.list`
+  - Points MIME associations at the real installed `.desktop` IDs (e.g. `okularApplication_pdf.desktop`, `imv.desktop`, `org.kde.haruna.desktop`)
+  - Dolphin's "Open With" dialog has a KF6/Plasma 6 bug (kio/kservice 6.27.0) where choosing an app — even from its suggestion list — doesn't match it to the existing service and instead fabricates a new throwaway `~/.local/share/applications/<name>-N.desktop` (`NoDisplay=true`) each time, so associations never appear to "stick". Set/change associations by editing this file directly instead of using Dolphin's dialog
 - `alsa/` → `~/.asoundrc`
   - Forces ALSA's default PCM to `type pipewire`, overriding `alsa-plugins`' `99-pulseaudio-default.conf` which otherwise wins the `pipewire-pulse` vs `alsa-plugins` default-device race (see `workarounds/voice-mode-alsa-dsnoop.md`)
 

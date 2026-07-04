@@ -142,7 +142,7 @@ yay -S --needed - < ~/git/arch-dotfiles/packages/pkglist-aur.txt
 
 ```bash
 cd ~/git/arch-dotfiles
-stow bash hypr waybar kitty wofi
+stow bash hypr waybar kitty wofi mimeapps
 sudo stow --target=/ sddm
 sudo stow --target=/ xone
 sudo stow --target=/ discord-update

@@ -1,0 +1,10 @@
+[Added Associations]
+application/pdf=okularApplication_pdf.desktop;
+image/jpeg=imv.desktop;
+video/mp4=org.kde.haruna.desktop;mpv.desktop;
+
+[Default Applications]
+application/pdf=okularApplication_pdf.desktop;
+image/jpeg=imv.desktop;
+video/mp4=org.kde.haruna.desktop;
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
