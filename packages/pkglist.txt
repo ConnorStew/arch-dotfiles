@@ -23,7 +23,9 @@ git
 godot
 grub
 haruna
+hypridle
 hyprland
+hyprlock
 hyprshot
 imv
 intel-ucode

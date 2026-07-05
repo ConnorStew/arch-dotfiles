@@ -233,6 +233,10 @@ chmod 600 ~/.ssh/config
 chmod 600 ~/git/arch-config/ssh/.ssh/config
 ```
 
+### 5f. Screen locking
+
+`hypridle` and `hyprlock` are installed by step 4 and need no extra enable step — `hypridle` autostarts via `hyprland.conf` (`exec-once = hypridle`). It locks the session (`loginctl lock-session`) before suspend, which is triggered by closing the lid (logind's default `HandleLidSwitch=suspend`), and also after 10 minutes of inactivity. `hyprlock.conf` styles the lock screen to match the `sddm-astronaut-theme` (installed via `pkglist-aur.txt` in step 4, set up in step 7) — same background, palette, and font — and adds Restart/Shut Down buttons (bottom-right) that run `systemctl reboot` / `systemctl poweroff` directly.
+
 ### 6. Fix Claude Code symlink (AUR install)
 
 The AUR package installs to `/usr/bin/claude` but Claude Code expects `~/.local/bin/claude`:
