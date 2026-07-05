@@ -2,6 +2,7 @@ alsa-utils
 ansible
 ansible-lint
 aws-cli-v2
+awww
 base
 base-devel
 breeze-gtk
@@ -23,7 +24,6 @@ godot
 grub
 haruna
 hyprland
-hyprpaper
 hyprshot
 imv
 intel-ucode

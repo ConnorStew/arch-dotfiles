@@ -1,0 +1,6 @@
+[Unit]
+Description=Cycle Hyprland wallpaper
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/hypr/wallpaper-cycle.sh

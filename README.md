@@ -210,7 +210,18 @@ To run immediately:
 sudo systemctl start reflector.service
 ```
 
-### 5d. Stow SSH config
+### 5d. Enable wallpaper cycling timer
+
+Wallpapers are cycled randomly from `~/wallpapers/` by `hypr/.config/hypr/wallpaper-cycle.sh`, using [awww](https://codeberg.org/LGFae/awww) (the actively maintained successor to `swww`; Arch's `swww` package was replaced by `awww`, which also provides `swww`). `awww-daemon` is autostarted via `hyprland.conf`, which also runs `wallpaper-cycle.sh` once on login so there's an actual wallpaper immediately rather than a blank screen — `awww-daemon` starts with no wallpaper set until something calls `awww img`. Enable the timer for periodic cycling every 30 minutes after that:
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now wallpaper-cycle.timer
+```
+
+Trigger a cycle manually any time with `SUPER SHIFT W`.
+
+### 5e. Stow SSH config
 
 SSH requires strict permissions or it will refuse to use the files:
 

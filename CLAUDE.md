@@ -9,7 +9,10 @@ All config files should be symlinked via stow. When adding or editing any config
 ## Stow Packages
 
 - `bash/` → `~/.bashrc`, `~/.bash_profile`
-- `hypr/` → `~/.config/hypr/`
+- `hypr/` → `~/.config/hypr/`, `~/.config/systemd/user/wallpaper-cycle.{service,timer}`
+  - Wallpapers cycle randomly from `~/wallpapers/` via `wallpaper-cycle.sh`, using `awww` (`awww-daemon` + `awww img`) — NOT `swww`. Arch's `swww` package was replaced by `awww` (same author, `Provides`/`Replaces: swww`, but a different CLI — `swww-daemon`/`swww img` don't exist under `awww`). We moved off `hyprpaper` entirely because `hyprctl hyprpaper preload`/`wallpaper` started failing with `invalid hyprpaper request` on hyprpaper 0.8.4 (a rewrite now linked against `hyprtoolkit`) paired with Hyprland 0.55.4 — a wire-protocol mismatch confirmed by raw-socket testing, not a config bug
+  - `hyprland.conf` starts `awww-daemon` then immediately runs `wallpaper-cycle.sh` once via `exec-once` — required, not just for variety: `awww-daemon` starts with no wallpaper at all until something calls `awww img`, so skipping this would leave a blank screen until the timer's first fire
+  - `wallpaper-cycle.timer` (systemd --user) re-runs the script every 30 min after that; `SUPER SHIFT W` also runs it manually (bound in `hyprland.conf`)
 - `waybar/` → `~/.config/waybar/`
 - `kitty/` → `~/.config/kitty/`
 - `wofi/` → `~/.config/wofi/`
