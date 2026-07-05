@@ -14,3 +14,4 @@
 
 - [ ] Does ssdm need those permissions espically to the wallpaper?
 - [ ] Consider using this instead of stow: https://www.chezmoi.io/
+- [ ] Check awww animated wallpapers.
