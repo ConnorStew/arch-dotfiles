@@ -28,7 +28,6 @@ hyprland
 hyprlock
 hyprshot
 imv
-intel-ucode
 jq
 kitty
 libvirt
@@ -83,4 +82,3 @@ wpa_supplicant
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 zip
-zram-generator
