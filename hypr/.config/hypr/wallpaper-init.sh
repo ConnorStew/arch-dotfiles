@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-current="$(awww query 2>/dev/null | grep -oP 'image: \K\S+' | head -1)"
+current="$(awww query 2>/dev/null | grep -oP 'image: \K\S+' | head -1 || true)"
 [ -n "$current" ] && exit 0
 
 WALLPAPER_DIR="$HOME/wallpapers"
