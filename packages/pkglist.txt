@@ -5,6 +5,7 @@ aws-cli-v2
 base
 base-devel
 breeze-gtk
+brightnessctl
 cloud-image-utils
 discord
 dnsmasq
@@ -25,6 +26,7 @@ hyprland
 hyprpaper
 hyprshot
 imv
+intel-ucode
 jq
 kitty
 libvirt
@@ -35,6 +37,7 @@ lvm2
 mako
 man-db
 man-pages
+mkinitcpio
 mpv
 nano
 networkmanager
@@ -62,6 +65,7 @@ sddm
 sshpass
 steam
 stow
+sudo
 testdisk
 timeshift
 ttf-droid
@@ -73,6 +77,8 @@ waybar
 weston
 woff2-font-awesome
 wofi
+wpa_supplicant
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 zip
+zram-generator

@@ -26,6 +26,9 @@ All config files should be symlinked via stow. When adding or editing any config
   - Requires `sudo stow --target=/ xone`
   - Blacklists `mt76x2u` so the Xbox wireless adapter is claimed by `xone-dongle` instead
 - `reflector/` — NOT stowed. The reflector systemd service uses `ProtectHome=true` which blocks symlinks into `/home`. Config is tracked in the repo for version control but deployed as a plain copy (see README).
+- `xdg-terminals/` → `~/.config/xdg-terminals.list`
+  - Tells `xdg-terminal-exec` (AUR) to prefer `kitty.desktop` when launching any `.desktop` entry with `Terminal=true`
+  - Modern GLib (2.88+) no longer honors the old `/usr/bin/x-terminal-emulator` alternative convention for this — it checks `xdg-terminal-exec` first, then a hardcoded terminal list that doesn't include kitty. See `workarounds/nordvpn-xdg-open-terminal.md` (root cause was NordVPN's `nordvpn://` URL scheme handler silently failing to launch).
 - `claude/` → `~/.config/systemd/user/claude-remote-control.service`
   - Runs `claude remote-control` for phone access via the Claude mobile app
   - Manual start only (no [Install] section): `systemctl --user start claude-remote-control`

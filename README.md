@@ -56,6 +56,7 @@ See [`workarounds/`](workarounds/) for documented fixes to hardware/driver issue
 
 - [Xbox Wireless Adapter](workarounds/xbox-wireless-adapter.md) — blacklists `mt76x2u` which incorrectly claims the dongle
 - [Claude Code AUR Symlink](workarounds/claude-code-aur-symlink.md) — AUR install lands in `/usr/bin/`, needs symlink to `~/.local/bin/`
+- [NordVPN xdg-open Terminal](workarounds/nordvpn-xdg-open-terminal.md) — browser login doesn't reach the app because `nordvpn.desktop` needs a missing `x-terminal-emulator`
 
 ## Full System Update
 
@@ -171,7 +172,7 @@ yay -S --needed - < ~/git/arch-config/packages/pkglist-aur.txt
 
 ```bash
 cd ~/git/arch-config
-stow bash hypr waybar kitty wofi mimeapps mako alsa claude xdg-desktop-portal
+stow bash hypr waybar kitty wofi mimeapps mako alsa claude xdg-desktop-portal xdg-terminals
 sudo stow --target=/ sddm
 sudo stow --target=/ xone
 sudo stow --target=/ discord-update

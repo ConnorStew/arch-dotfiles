@@ -4,5 +4,7 @@ claudebar
 nordvpn-gui-bin
 sddm-astronaut-theme
 visual-studio-code-bin
+xdg-terminal-exec
 xone-dkms-git
 yay
+yay-debug
