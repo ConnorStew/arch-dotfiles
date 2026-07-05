@@ -171,7 +171,7 @@ yay -S --needed - < ~/git/arch-config/packages/pkglist-aur.txt
 
 ```bash
 cd ~/git/arch-config
-stow bash hypr waybar kitty wofi mimeapps mako alsa claude
+stow bash hypr waybar kitty wofi mimeapps mako alsa claude xdg-desktop-portal
 sudo stow --target=/ sddm
 sudo stow --target=/ xone
 sudo stow --target=/ discord-update
@@ -273,3 +273,5 @@ flatpak override --user --env=GTK_THEME=Adwaita:dark com.visualstudio.code
 flatpak override --user --env=GTK_THEME=Adwaita:dark com.brave.Browser
 flatpak override --user --env=GTK_THEME=Adwaita:dark com.spotify.Client
 ```
+
+This only themes dialogs drawn *inside* the Flatpak sandbox. File pickers (e.g. VS Code's "Open Folder", Brave's save-file dialog) are drawn on the host by `xdg-desktop-portal-gtk` and ignore the override above entirely — that's what the `xdg-desktop-portal` stow package (step 5) fixes: it routes the `FileChooser` portal to the `gtk` backend (otherwise broken under Hyprland, so sandboxed apps can't open a file dialog at all) and sets the real GTK3 dark-mode key so those dialogs render dark instead of light. See `CLAUDE.md` for the full story of why the more obvious fixes (`gsettings gtk-theme 'Adwaita-dark'`, `color-scheme prefer-dark`) don't actually work here.

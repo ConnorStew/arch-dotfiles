@@ -39,9 +39,11 @@ All config files should be symlinked via stow. When adding or editing any config
   - Dolphin's "Open With" dialog has a KF6/Plasma 6 bug (kio/kservice 6.27.0) where choosing an app — even from its suggestion list — doesn't match it to the existing service and instead fabricates a new throwaway `~/.local/share/applications/<name>-N.desktop` (`NoDisplay=true`) each time, so associations never appear to "stick". Set/change associations by editing this file directly instead of using Dolphin's dialog
 - `alsa/` → `~/.asoundrc`
   - Forces ALSA's default PCM to `type pipewire`, overriding `alsa-plugins`' `99-pulseaudio-default.conf` which otherwise wins the `pipewire-pulse` vs `alsa-plugins` default-device race (see `workarounds/voice-mode-alsa-dsnoop.md`)
-- `xdg-desktop-portal/` → `~/.config/xdg-desktop-portal/portals.conf`
-  - Routes `org.freedesktop.impl.portal.FileChooser`/`Settings` to the `gtk` backend. Without it, sandboxed apps (e.g. Flatpak Brave) can't open any file dialog under Hyprland: `xdg-desktop-portal-gtk`'s own `.portal` file restricts itself to `UseIn=gnome`, and `xdg-desktop-portal-hyprland` doesn't implement `FileChooser` at all, so with `XDG_CURRENT_DESKTOP=Hyprland` and no `portals.conf` the request has no backend to route to
-  - Apply immediately without logout: `systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland`
+- `xdg-desktop-portal/` → `~/.config/xdg-desktop-portal/portals.conf`, `~/.config/gtk-3.0/settings.ini`
+  - `portals.conf` routes `org.freedesktop.impl.portal.FileChooser`/`Settings` to the `gtk` backend. Without it, sandboxed apps (e.g. Flatpak Brave) can't open any file dialog under Hyprland: `xdg-desktop-portal-gtk`'s own `.portal` file restricts itself to `UseIn=gnome`, and `xdg-desktop-portal-hyprland` doesn't implement `FileChooser` at all, so with `XDG_CURRENT_DESKTOP=Hyprland` and no `portals.conf` the request has no backend to route to
+    - Apply immediately without logout: `systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland`
+  - `gtk-3.0/settings.ini` sets `gtk-application-prefer-dark-theme=true`, which is what actually makes those portal dialogs (`xdg-desktop-portal-gtk` is GTK3) render dark. `gsettings set org.gnome.desktop.interface color-scheme prefer-dark` alone does NOT do this — confirmed by screenshotting a live portal `FileChooser.OpenFile` dialog, which stayed light with only `color-scheme` set and only turned dark once this file existed. Setting `gtk-theme` to a fake `'Adwaita-dark'` name doesn't work either — no such theme is installed under `/usr/share/themes`, so GTK3 silently falls back to plain light `Adwaita`
+    - Apply immediately without logout: `systemctl --user restart xdg-desktop-portal-gtk`
 
 ## Flatpak Notes
 
@@ -51,8 +53,8 @@ All config files should be symlinked via stow. When adding or editing any config
 - GTK native dialogs *rendered inside the sandbox* (e.g. in-app sync confirmations) default to light theme in Flatpak apps
   - Fixed per-app with: `flatpak override --user --env=GTK_THEME=Adwaita:dark <app-id>`
   - Applied to: `com.visualstudio.code`, `com.brave.Browser`, `com.spotify.Client`
-- File pickers (e.g. VS Code's "Open Folder") are NOT rendered by the sandboxed app — they're drawn by `xdg-desktop-portal-gtk`, a host-side process (`systemctl --user status xdg-desktop-portal-gtk`) that ignores the flatpak's `GTK_THEME` override entirely and instead reads the host's `org.gnome.desktop.interface` gsettings
-  - Fixed system-wide (affects portal dialogs for all apps, not just Flatpak ones) with: `gsettings set org.gnome.desktop.interface color-scheme prefer-dark`
+- File pickers (e.g. VS Code's "Open Folder") are NOT rendered by the sandboxed app — they're drawn by `xdg-desktop-portal-gtk`, a host-side process (`systemctl --user status xdg-desktop-portal-gtk`) that ignores the flatpak's `GTK_THEME` override entirely and instead reads the host's GTK3 config
+  - Fixed system-wide (affects portal dialogs for all apps, not just Flatpak ones) — see `gtk-3.0/settings.ini` under the `xdg-desktop-portal/` stow package above
   - Apply immediately without logout: `systemctl --user restart xdg-desktop-portal-gtk.service`
 
 ## Package Lists (`packages/`)
