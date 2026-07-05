@@ -3,3 +3,4 @@ allow_images=true
 mode=drun
 color=.config/wofi/colors
 normal_window=true
+gtk_dark=true
