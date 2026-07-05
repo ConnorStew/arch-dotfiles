@@ -212,7 +212,7 @@ sudo systemctl start reflector.service
 
 ### 5d. Enable wallpaper cycling timer
 
-Wallpapers are cycled randomly from `~/wallpapers/` by `hypr/.config/hypr/wallpaper-cycle.sh`, using [awww](https://codeberg.org/LGFae/awww) (the actively maintained successor to `swww`; Arch's `swww` package was replaced by `awww`, which also provides `swww`). `awww-daemon` is autostarted via `hyprland.conf`, which also runs `wallpaper-cycle.sh` once on login so there's an actual wallpaper immediately rather than a blank screen — `awww-daemon` starts with no wallpaper set until something calls `awww img`. Enable the timer for periodic cycling every 30 minutes after that:
+Wallpapers are cycled randomly from `~/wallpapers/` by `hypr/.config/hypr/wallpaper-cycle.sh`, using [awww](https://codeberg.org/LGFae/awww) (the actively maintained successor to `swww`; Arch's `swww` package was replaced by `awww`, which also provides `swww`). `awww-daemon` is autostarted via `hyprland.conf` and restores the last-displayed wallpaper per output from its own cache on startup, so nothing needs to run on every login. `hyprland.conf` also runs `wallpaper-init.sh` once on login as a fallback for a brand new install (empty cache) — it only sets a wallpaper if `awww query` shows none is displayed yet, avoiding a blank screen on first boot without disturbing the cache restore on every later login. Enable the timer for periodic cycling every 30 minutes:
 
 ```bash
 systemctl --user daemon-reload
