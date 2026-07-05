@@ -132,9 +132,10 @@ button:hover {
     margin-right: 0;
 }
 
-#custom-power {
+#custom-power,
+#custom-launcher {
     font-size: 13px;
-    padding-top: 4px;
+    padding-right: 16px;
 }
 
 #battery.charging, #battery.plugged {
