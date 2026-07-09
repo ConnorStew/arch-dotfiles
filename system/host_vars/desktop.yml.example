@@ -1,0 +1,10 @@
+---
+# TEMPLATE — rename to <desktop-hostname>.yml on the desktop (must match `uname -n`)
+# and add that hostname to inventory.yml.
+
+# Phase 3 gating:
+xone_enabled: true    # desktop uses the Xbox wireless adapter
+
+# Phase 4 — host-specific packages (placeholders):
+packages_host: []     # e.g. nvidia set, xone-dkms, ucode variant
+aur_host: []

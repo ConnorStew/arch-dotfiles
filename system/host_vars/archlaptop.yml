@@ -1,0 +1,9 @@
+---
+# archlaptop-specific configuration.
+
+# Phase 3 gating:
+xone_enabled: false   # laptop doesn't use the Xbox wireless adapter (confirm)
+
+# Phase 4 — host-specific packages (placeholders):
+packages_host: []     # e.g. ucode variant, brightnessctl, power-profiles-daemon
+aur_host: []

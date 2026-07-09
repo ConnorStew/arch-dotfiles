@@ -1,0 +1,25 @@
+---
+# Main playbook. Run from system/:
+#   ansible-galaxy collection install -r requirements.yml   # once
+#   ansible-playbook site.yml --limit "$(uname -n)" --check --diff   # preview
+#   ansible-playbook site.yml --limit "$(uname -n)" -K              # apply
+- name: Configure the system layer
+  hosts: all
+  become: false
+  tasks:
+    - name: Verify host_vars loaded for this machine
+      ansible.builtin.assert:
+        that:
+          - packages_common is defined
+          - xone_enabled is defined
+        fail_msg: >-
+          host_vars/{{ inventory_hostname }}.yml did not load — check that the
+          inventory hostname matches `uname -n` and that you passed
+          --limit "$(uname -n)".
+        success_msg: "Scaffolding OK for {{ inventory_hostname }}."
+
+  # Later phases slot in here as task files / roles:
+  #   - import_tasks: tasks/sddm.yml       # Phase 3
+  #   - import_tasks: tasks/xone.yml        # Phase 3 (when: xone_enabled)
+  #   - import_tasks: tasks/packages.yml    # Phase 4
+  #   - import_tasks: tasks/readme_steps.yml # Phase 5

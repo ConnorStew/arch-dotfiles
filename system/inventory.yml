@@ -1,0 +1,12 @@
+# One entry per machine, all local connections. `inventory_hostname` matches the
+# real hostname so host_vars/<hostname>.yml auto-loads. Always scope a run with
+# `--limit "$(uname -n)"` so you only configure the box you're sitting at.
+all:
+  hosts:
+    archlaptop:
+      ansible_connection: local
+    # TODO: add the desktop once its hostname is known, e.g.:
+    # archdesktop:
+    #   ansible_connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
