@@ -41,19 +41,38 @@ arch-config/
 ├── scripts/                   # unchanged (+ new check-drift.sh)
 ├── workarounds/               # unchanged
 ├── README.md                  # shrinks to: clone → stow → run playbook
-└── .stowrc                    # --dir=dotfiles --target=~
+└── .stowrc                    # --dir=dotfiles --target=/home/connor (see Phase 1)
 ```
 
 ## Phase 1 — Move stow packages under `dotfiles/`
 
-1. `git mv` the 12 home-targeting packages into `dotfiles/`.
-2. Update `.stowrc` to `--dir=dotfiles` and `--target=~` (stow ≥ 2.3 expands `~`).
-3. **Restow in the same sitting** — the move breaks every existing symlink:
+The whole point: `.stowrc` becomes the single place that knows *where the packages
+live* (`--dir`) and *where they land* (`--target`), so every `stow`/`stow -D`
+command runs bare from the repo root with just package names — no `-d`/`-t` flags
+to remember or get wrong.
+
+1. **Unstow with the *old* `.stowrc` still in place** — stow needs `--dir`/`--target`
+   to match how the links were originally made, or `-D` won't recognize (and remove)
+   them:
 
    ```bash
-   # before moving: from repo root
+   # from repo root, .stowrc still = --target=/home/connor (no --dir yet)
    stow -D bash hypr waybar kitty wofi mako ssh mimeapps alsa claude xdg-desktop-portal xdg-terminals
-   # after git mv + .stowrc update:
+   ```
+
+2. `git mv` the 12 home-targeting packages into `dotfiles/`.
+3. Update `.stowrc` to point at the new location. Keep `--target` **absolute**
+   (avoids the stow-version-dependent `~` expansion); add `--dir`:
+
+   ```
+   --dir=dotfiles
+   --target=/home/connor
+   ```
+
+4. **Restow in the same sitting** — the move broke every existing symlink:
+
+   ```bash
+   # from repo root; .stowrc now supplies --dir=dotfiles --target=/home/connor
    stow bash hypr waybar kitty wofi mako ssh mimeapps alsa claude xdg-desktop-portal xdg-terminals
    # verify nothing dangles:
    find ~ ~/.config ~/.ssh -maxdepth 2 -xtype l
@@ -64,6 +83,10 @@ arch-config/
    The running Hyprland session is unaffected while links dangle, but don't reload
    Hyprland/waybar mid-move. This step must be repeated once on the desktop after
    pulling the branch.
+
+Note: the root-targeted packages (`sddm`, `xone`, `discord-update`, `reflector`)
+stay at the repo root — they leave stow entirely in Phase 3, so `--dir=dotfiles`
+doesn't touch them.
 
 ## Phase 2 — Ansible scaffolding
 
