@@ -33,7 +33,7 @@ arch-config/
 │   │   ├── archlaptop.yml
 │   │   └── <desktop-hostname>.yml   # TODO: fill in real hostname
 │   └── files/
-│       ├── sddm/              # theme.conf, metadata.desktop, weston.ini, forest.jpg
+│       ├── sddm/              # theme.conf, metadata.desktop, weston.ini
 │       ├── xone.conf
 │       ├── discord-update.service / .timer
 │       └── reflector.conf
@@ -106,7 +106,7 @@ doesn't touch them.
 
 | Old stow package | Ansible tasks |
 |---|---|
-| `sddm/` | `copy` theme.conf → `/etc/sddm.conf.d/`, metadata.desktop → theme dir, weston.ini → `/var/lib/sddm/.config/`; root-owned 0644. Also copy `forest.jpg` into the repo (`system/files/sddm/`) and deploy it to the theme's `Backgrounds/` dir, updating metadata.desktop to point there — removes the last SDDM dependency on `/home`. Then `systemd` enable sddm + `set-default graphical.target` (command task with `changed_when` guard). |
+| `sddm/` | `copy` theme.conf → `/etc/sddm.conf.d/`, metadata.desktop → theme dir, weston.ini → `/var/lib/sddm/.config/`; root-owned 0644. The theme's background lives in the installed theme package (`Backgrounds/jake_the_dog.png`), so nothing image-related is vendored into this repo. Then `systemd` enable sddm + `set-default graphical.target` (command task with `changed_when` guard). |
 | `xone/` | `copy` xone.conf → `/etc/modprobe.d/`, gated on a host var (e.g. `xone_enabled: true` on desktop only — confirm whether the laptop ever uses the adapter). |
 | `discord-update/` | `copy` units → `/etc/systemd/system/` + enable timer. Consider per-host gating, and note the existing `pacman -Sy discord` partial-upgrade caveat — decide keep/drop while porting. |
 | `reflector/` | `copy` reflector.conf → `/etc/xdg/reflector/` + enable timer. Already copy-based; delete README section 5c. |
