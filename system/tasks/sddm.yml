@@ -1,0 +1,65 @@
+---
+# SDDM: display manager config + astronaut theme metadata + greeter monitor layout.
+# All root-owned copies. `follow: false` so a leftover stow symlink is replaced,
+# never written through back into the repo.
+- name: Copy sddm display-manager config
+  ansible.builtin.copy:
+    src: files/sddm/theme.conf
+    dest: /etc/sddm.conf.d/theme.conf
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+
+- name: Copy astronaut theme metadata
+  ansible.builtin.copy:
+    src: files/sddm/metadata.desktop
+    dest: /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+
+# weston.ini is a per-host greeter monitor workaround (HDMI-A-1 off) — only the
+# desktop needs it, so it's gated. The laptop currently has no weston.ini and
+# should stay that way.
+- name: Ensure sddm greeter .config dir exists
+  ansible.builtin.file:
+    path: /var/lib/sddm/.config
+    state: directory
+    owner: sddm
+    group: sddm
+    mode: "0755"
+  become: true
+  when: sddm_greeter_weston | default(false)
+
+- name: Copy greeter weston.ini (monitor layout)
+  ansible.builtin.copy:
+    src: files/sddm/weston.ini
+    dest: /var/lib/sddm/.config/weston.ini
+    owner: sddm
+    group: sddm
+    mode: "0644"
+    follow: false
+  become: true
+  when: sddm_greeter_weston | default(false)
+
+- name: Enable sddm (do NOT start/restart — would kill the running session)
+  ansible.builtin.systemd_service:
+    name: sddm.service
+    enabled: true
+  become: true
+
+- name: Check current default systemd target
+  ansible.builtin.command: systemctl get-default
+  register: sddm_default_target
+  changed_when: false
+  check_mode: false
+
+- name: Set default target to graphical
+  ansible.builtin.command: systemctl set-default graphical.target
+  become: true
+  when: sddm_default_target.stdout != "graphical.target"
+  changed_when: true

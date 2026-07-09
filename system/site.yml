@@ -18,8 +18,22 @@
           --limit "$(uname -n)".
         success_msg: "Scaffolding OK for {{ inventory_hostname }}."
 
-  # Later phases slot in here as task files / roles:
-  #   - import_tasks: tasks/sddm.yml       # Phase 3
-  #   - import_tasks: tasks/xone.yml        # Phase 3 (when: xone_enabled)
-  #   - import_tasks: tasks/packages.yml    # Phase 4
-  #   - import_tasks: tasks/readme_steps.yml # Phase 5
+    # Phase 3 — root-level files (former sudo-stow packages):
+    - name: SDDM display manager
+      ansible.builtin.import_tasks: tasks/sddm.yml
+    - name: Xone Xbox adapter
+      ansible.builtin.import_tasks: tasks/xone.yml
+    - name: Discord-update units
+      ansible.builtin.import_tasks: tasks/discord-update.yml
+    - name: Reflector mirrorlist
+      ansible.builtin.import_tasks: tasks/reflector.yml
+
+    # Later phases slot in here:
+    #   - ansible.builtin.import_tasks: tasks/packages.yml     # Phase 4
+    #   - ansible.builtin.import_tasks: tasks/readme_steps.yml # Phase 5
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+      become: true

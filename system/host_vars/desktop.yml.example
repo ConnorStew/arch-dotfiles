@@ -3,7 +3,8 @@
 # and add that hostname to inventory.yml.
 
 # Phase 3 gating:
-xone_enabled: true    # desktop uses the Xbox wireless adapter
+xone_enabled: true          # desktop uses the Xbox wireless adapter
+sddm_greeter_weston: true   # desktop needs the HDMI-A-1-off greeter workaround
 
 # Phase 4 — host-specific packages (placeholders):
 packages_host: []     # e.g. nvidia set, xone-dkms, ucode variant

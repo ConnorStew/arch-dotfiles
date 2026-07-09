@@ -1,0 +1,25 @@
+---
+# Auto-update Discord shortly after boot. NOTE: keeps the existing `pacman -Sy
+# discord` (partial-upgrade risk accepted deliberately). Runs on both machines.
+- name: Copy discord-update units
+  ansible.builtin.copy:
+    src: "files/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+  loop:
+    - discord-update.service
+    - discord-update.timer
+  notify: Reload systemd
+  when: discord_update_enabled | default(true)
+
+- name: Enable discord-update timer
+  ansible.builtin.systemd_service:
+    name: discord-update.timer
+    enabled: true
+    daemon_reload: true
+  become: true
+  when: discord_update_enabled | default(true)
