@@ -1,11 +1,14 @@
 ---
 # Main playbook. Run from system/:
 #   ansible-galaxy collection install -r requirements.yml   # once
-#   ansible-playbook site.yml --limit "$(uname -n)" --check --diff   # preview
+#   ansible-playbook site.yml --limit "$(uname -n)" --check --diff -K  # preview
 #   ansible-playbook site.yml --limit "$(uname -n)" -K              # apply
 - name: Configure the system layer
   hosts: all
   become: false
+  # In --check previews, keep going past failures so the whole run is reported;
+  # real applies still fail-fast.
+  ignore_errors: "{{ ansible_check_mode }}"
   tasks:
     - name: Verify host_vars loaded for this machine
       ansible.builtin.assert:
