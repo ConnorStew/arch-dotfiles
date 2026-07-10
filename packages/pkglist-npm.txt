@@ -1,5 +1,0 @@
-claude-code
-node-gyp
-nopt
-npm
-semver
