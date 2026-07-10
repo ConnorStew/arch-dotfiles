@@ -2,7 +2,7 @@
 # Auto-update Discord shortly after boot.
 - name: Copy discord-update units
   ansible.builtin.copy:
-    src: "files/{{ item }}"
+    src: "files/discord-update/{{ item }}"
     dest: "/etc/systemd/system/{{ item }}"
     owner: root
     group: root
