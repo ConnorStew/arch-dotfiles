@@ -184,7 +184,7 @@ ansible-playbook site.yml --limit "$(uname -n)" --check --diff -K   # preview
 ansible-playbook site.yml --limit "$(uname -n)" -K                  # apply
 ```
 
-This installs native packages, enables SDDM/reflector/discord-update, sets ssh perms, enables the user timers, installs flatpaks, and applies everything else. Multilib (for Steam) is enabled by the playbook — no manual `pacman.conf` edit needed.
+This installs native packages, enables SDDM/reflector/discord-update, sets ssh perms, deploys and enables the user units, installs flatpaks, and applies everything else. Multilib (for Steam) is enabled by the playbook — no manual `pacman.conf` edit needed.
 
 ### 7. Install AUR packages manually
 

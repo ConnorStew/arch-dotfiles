@@ -1,6 +1,6 @@
 ---
-# User-level config that used to be manual README steps. Runs as the connor user
-# (no become): ssh permissions and the systemd --user enables.
+# User-level config. Runs as the connor user (no become): ssh permissions,
+# systemd --user unit files, and their enables.
 
 # SSH refuses to use config files with loose permissions. ~/.ssh/config is a stow
 # symlink into the repo, so `follow: true` sets the mode on the real file.
@@ -16,8 +16,25 @@
     mode: "0600"
     follow: true
 
-# systemd --user units (no become; uses the connor user's session manager).
-# wallpaper-cycle.timer is stow-symlinked in, so reload the user daemon for it.
+# systemd --user unit files (no become — they live under the connor user's home).
+- name: Ensure ~/.config/systemd/user exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user"
+    state: directory
+    mode: "0755"
+
+- name: Deploy wallpaper-cycle user units
+  ansible.builtin.copy:
+    src: "files/wallpaper-cycle/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/{{ item }}"
+    mode: "0644"
+    follow: false        # replace a leftover stow symlink, don't write through it
+  loop:
+    - wallpaper-cycle.service
+    - wallpaper-cycle.timer
+
+# Enables (no become; uses the connor user's session manager). wallpaper-cycle.timer
+# was just (re)deployed above, so reload the user daemon before enabling it.
 - name: Enable user timers and services
   ansible.builtin.systemd_service:
     name: "{{ item.name }}"
