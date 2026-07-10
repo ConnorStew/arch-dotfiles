@@ -28,6 +28,15 @@ stow -D hypr         # unstow
 stow -n hypr -v      # simulate
 ```
 
+Stow or unstow **all** packages at once (`ls dotfiles` supplies the package names, since `.stowrc` already sets `--dir=dotfiles`):
+
+```bash
+cd ~/git/arch-config
+stow $(ls dotfiles)      # stow every package
+stow -D $(ls dotfiles)   # unstow every package
+stow -R $(ls dotfiles)   # restow (unstow + stow) every package
+```
+
 Removing a file from a package:
 
 1. Delete it from `dotfiles/<pkg>/…`
