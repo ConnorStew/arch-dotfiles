@@ -4,7 +4,8 @@ After=network-online.target
 
 [Service]
 WorkingDirectory=/home/connor/claude-remote
-ExecStart=/home/connor/.local/bin/claude remote-control --name "Connor's PC"
+# %H expands to the machine's hostname at unit-load time.
+ExecStart=/home/connor/.local/bin/claude remote-control --name "%H"
 Restart=on-failure
 RestartSec=10
 
