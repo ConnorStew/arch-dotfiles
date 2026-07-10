@@ -8,14 +8,14 @@
   block:
     - name: Ensure user systemd unit dir exists
       ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.config/systemd/user"
+        path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user"
         state: directory
         mode: "0755"
 
     - name: Copy claude-remote-control user service
       ansible.builtin.copy:
         src: files/claude/claude-remote-control.service
-        dest: "{{ ansible_user_dir }}/.config/systemd/user/claude-remote-control.service"
+        dest: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/claude-remote-control.service"
         mode: "0644"
         follow: false        # replace a leftover stow symlink, don't write through it
 

@@ -1,0 +1,30 @@
+---
+# User-level config that used to be manual README steps. Runs as the connor user
+# (no become): ssh permissions and the systemd --user enables.
+
+# SSH refuses to use config files with loose permissions. ~/.ssh/config is a stow
+# symlink into the repo, so `follow: true` sets the mode on the real file.
+- name: Secure ~/.ssh directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Secure ~/.ssh/config
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/config"
+    mode: "0600"
+    follow: true
+
+# systemd --user units (no become; uses the connor user's session manager).
+# wallpaper-cycle.timer is stow-symlinked in, so reload the user daemon for it.
+- name: Enable user timers and services
+  ansible.builtin.systemd_service:
+    name: "{{ item.name }}"
+    enabled: true
+    scope: user
+    daemon_reload: "{{ item.reload | default(false) }}"
+  loop:
+    - { name: arch-update.timer }
+    - { name: arch-update-tray.service }
+    - { name: wallpaper-cycle.timer, reload: true }

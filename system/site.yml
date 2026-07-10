@@ -35,8 +35,8 @@
       ansible.builtin.import_tasks: tasks/claude-remote-control.yml
     - name: Packages (native/AUR/flatpak/npm)
       ansible.builtin.import_tasks: tasks/packages.yml
-
-    #   - ansible.builtin.import_tasks: tasks/readme_steps.yml # Phase 5
+    - name: User-level config (ssh perms, user units)
+      ansible.builtin.import_tasks: tasks/user-config.yml
 
   handlers:
     - name: Reload systemd
