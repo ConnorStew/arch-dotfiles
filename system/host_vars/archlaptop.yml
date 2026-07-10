@@ -3,5 +3,7 @@
 xone_enabled: false # laptop doesn't use the Xbox wireless adapter
 
 # Host-specific packages
-packages_host: []
+packages_host:
+  - intel-ucode      # Intel CPU microcode (desktop uses nvidia/amd set instead)
+  - zram-generator
 aur_host: []

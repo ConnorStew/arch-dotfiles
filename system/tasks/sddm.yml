@@ -1,6 +1,16 @@
 ---
 # SDDM: display manager config + astronaut theme metadata + greeter monitor layout.
 # All root-owned copies. `follow: false` so a leftover stow symlink is replaced, never written through back into the repo.
+# ansible.builtin.copy refuses to create a missing parent dir, so ensure it exists first.
+- name: Ensure /etc/sddm.conf.d exists
+  ansible.builtin.file:
+    path: /etc/sddm.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
 - name: Copy sddm display-manager config
   ansible.builtin.copy:
     src: files/sddm/theme.conf
@@ -21,7 +31,7 @@
     follow: false
   become: true
 
-# weston.ini is a per-host greeter monitor workaround (HDMI-A-1 off) — only the desktop needs it, so it's gated. 
+# weston.ini is a per-host greeter monitor workaround (HDMI-A-1 off) — only the desktop needs it, so it's gated.
 - name: Ensure sddm greeter .config dir exists
   ansible.builtin.file:
     path: /var/lib/sddm/.config

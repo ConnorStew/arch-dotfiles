@@ -14,6 +14,8 @@
       ansible.builtin.assert:
         that:
           - packages_common is defined
+          - packages_host is defined
+          - aur_host is defined
           - xone_enabled is defined
         fail_msg: >-
           host_vars/{{ inventory_hostname }}.yml did not load — check that the
@@ -31,12 +33,17 @@
       ansible.builtin.import_tasks: tasks/reflector.yml
     - name: Claude remote-control (user service)
       ansible.builtin.import_tasks: tasks/claude-remote-control.yml
+    - name: Packages (native/AUR/flatpak/npm)
+      ansible.builtin.import_tasks: tasks/packages.yml
 
-    #   - ansible.builtin.import_tasks: tasks/packages.yml     # Phase 4
     #   - ansible.builtin.import_tasks: tasks/readme_steps.yml # Phase 5
 
   handlers:
     - name: Reload systemd
       ansible.builtin.systemd_service:
         daemon_reload: true
+      become: true
+    - name: Update pacman cache
+      community.general.pacman:
+        update_cache: true
       become: true
