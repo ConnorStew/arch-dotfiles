@@ -183,4 +183,85 @@ Port the remaining manual steps into tasks, then rewrite the README:
 4. Phase 5 README rewrite.
 5. Phase 6 extras.
 
+## Desktop cutover (main → rework)
+
+The branch was built and applied on `archlaptop`. To bring the desktop across, do
+the unstow **while still on `main`** (stow can only remove links it can still
+match), then switch branches and let Ansible take over. `<hostname>` = `uname -n`.
+
+1. **Snapshot first.** `sudo timeshift --create --comments "Before ansible cutover"`.
+
+2. **Unstow everything, still on `main`** (old layout: packages at repo root,
+   old `.stowrc` with `--target=/home/connor` and no `--dir`):
+
+   ```bash
+   cd ~/git/arch-config
+   stow -D bash hypr waybar kitty wofi mako ssh mimeapps alsa claude xdg-desktop-portal xdg-terminals
+   sudo stow -D --target=/ sddm xone discord-update      # reflector was a copy, not stowed
+   ```
+
+3. **Remove the old SDDM ACLs** (paths as they exist on the desktop):
+
+   ```bash
+   setfacl -b /home/connor /home/connor/git /home/connor/git/arch-config
+   setfacl -Rb /home/connor/git/arch-config/sddm
+   # plus any Pictures/Wallpapers ACLs from the old README step 7
+   ```
+
+4. **Switch to the branch:** `git fetch && git checkout rework && git pull`.
+
+5. **Clean up leftover symlinks stow -D can't catch** — directory-level stow folds
+   and dangling `systemctl enable` links that point back into the repo (this bit us
+   on the laptop; `/etc/sddm.conf.d` is the usual culprit):
+
+   ```bash
+   find /etc /usr /var -xtype l 2>/dev/null | while read -r l; do
+     case "$(readlink "$l")" in *arch-config*) echo "$l";; esac; done
+   # remove each one, e.g.:  sudo rm /etc/sddm.conf.d
+   sudo systemctl reenable discord-update.timer   # if its wants-link pointed into the repo
+   ```
+
+6. **Restow dotfiles the new way** (`.stowrc` now supplies `--dir=dotfiles`):
+
+   ```bash
+   cd ~/git/arch-config
+   stow $(ls dotfiles)
+   chmod 600 ~/.ssh/config
+   find ~ ~/.config ~/.ssh -maxdepth 2 -xtype l    # nothing should dangle
+   ```
+
+7. **Register the desktop with Ansible:**
+
+   ```bash
+   cp system/host_vars/desktop.yml.example system/host_vars/$(uname -n).yml
+   # edit it: nvidia set is already there; confirm xone_enabled / sddm_greeter_weston
+   # add "$(uname -n):\n  ansible_connection: local" under all.hosts in system/inventory.yml
+   ansible-galaxy collection install -r system/requirements.yml
+   ```
+
+8. **Preview, then apply:**
+
+   ```bash
+   cd system
+   ansible-playbook site.yml --limit "$(uname -n)" --check --diff -K   # review the drift
+   ansible-playbook site.yml --limit "$(uname -n)" -K                  # apply
+   ```
+
+   Expect the `--check` run to be noisier than the laptop's — the desktop's package
+   set may differ from what `host_vars` currently declares.
+
+9. **Verify:**
+
+   ```bash
+   find / -xtype l 2>/dev/null | xargs -r readlink -f 2>/dev/null | grep arch-config   # empty
+   system/scripts/check-drift.py     # reconcile any desktop-only packages into the vars
+   ```
+
+   Then log out/in through SDDM (highest-risk change), confirm
+   `reflector.timer`/`wallpaper-cycle.timer` are active, and `yay -S` any AUR packages
+   the playbook reported missing (should be none if they were already installed).
+
+10. Commit the new `host_vars/<hostname>.yml` + `inventory.yml` change, delete the
+    Timeshift snapshot once stable, and merge `rework` → `main`.
+
 Delete this file once the migration lands.
