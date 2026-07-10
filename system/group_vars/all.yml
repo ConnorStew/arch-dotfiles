@@ -10,7 +10,7 @@ discord_update_enabled: true   # both machines auto-update discord at boot
 claude_remote_control_enabled: false
 
 # --- Packages --------------------------------------------------------------
-# These vars are the source of truth (packages/dump.sh is gone). `scripts/check-drift.sh`
+# These vars are the source of truth (packages/dump.sh is gone). `system/scripts/check-drift.py`
 # diffs them against what's actually installed. Add host-only packages to
 # host_vars/<hostname>.yml (packages_host / aur_host).
 
