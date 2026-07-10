@@ -4,9 +4,7 @@
 
 discord_update_enabled: true   # both machines auto-update discord at boot
 
-packages_common: [
-  cowsay # Ansible random cows
-] # native pacman packages common to every machine
+packages_common: [] # native pacman packages common to every machine
 aur_packages: [] # AUR packages (via yay / kewlfft.aur)
 flatpak_apps: [] # flatpak app IDs
 npm_globals: [] # global npm packages
