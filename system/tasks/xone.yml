@@ -1,6 +1,5 @@
 ---
 # Blacklist mt76x2u so the Xbox wireless adapter is claimed by xone-dongle.
-# Gated on xone_enabled (desktop only) — see host_vars.
 - name: Copy xone modprobe blacklist
   ansible.builtin.copy:
     src: files/xone.conf

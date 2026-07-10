@@ -1,6 +1,5 @@
 ---
-# Auto-update Discord shortly after boot. NOTE: keeps the existing `pacman -Sy
-# discord` (partial-upgrade risk accepted deliberately). Runs on both machines.
+# Auto-update Discord shortly after boot.
 - name: Copy discord-update units
   ansible.builtin.copy:
     src: "files/{{ item }}"

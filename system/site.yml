@@ -18,7 +18,6 @@
           --limit "$(uname -n)".
         success_msg: "Scaffolding OK for {{ inventory_hostname }}."
 
-    # Phase 3 — root-level files (former sudo-stow packages):
     - name: SDDM display manager
       ansible.builtin.import_tasks: tasks/sddm.yml
     - name: Xone Xbox adapter
@@ -28,7 +27,6 @@
     - name: Reflector mirrorlist
       ansible.builtin.import_tasks: tasks/reflector.yml
 
-    # Later phases slot in here:
     #   - ansible.builtin.import_tasks: tasks/packages.yml     # Phase 4
     #   - ansible.builtin.import_tasks: tasks/readme_steps.yml # Phase 5
 

@@ -1,6 +1,5 @@
 ---
-# reflector mirrorlist config + timer. Was already copy-based (ProtectHome blocks
-# symlinks into /home), so this just formalizes it.
+# reflector mirrorlist config + timer.
 - name: Copy reflector config
   ansible.builtin.copy:
     src: files/reflector.conf

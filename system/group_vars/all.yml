@@ -1,12 +1,10 @@
 ---
-# Shared across all hosts. Populated in Phase 4 (packages) and Phase 3 (system files).
+# Shared across all hosts.
 # Per-host overrides/additions live in host_vars/<hostname>.yml.
 
-# Phase 3 — root-level file toggles:
 discord_update_enabled: true   # both machines auto-update discord at boot
 
-# Phase 4 — package sources of truth (currently placeholders):
-packages_common: []   # native pacman packages common to every machine
-aur_packages: []      # AUR packages (via yay / kewlfft.aur)
-flatpak_apps: []      # flatpak app IDs
-npm_globals: []       # global npm packages
+packages_common: [] # native pacman packages common to every machine
+aur_packages: [] # AUR packages (via yay / kewlfft.aur)
+flatpak_apps: [] # flatpak app IDs
+npm_globals: [] # global npm packages
