@@ -29,6 +29,8 @@
       ansible.builtin.import_tasks: tasks/discord-update.yml
     - name: Reflector mirrorlist
       ansible.builtin.import_tasks: tasks/reflector.yml
+    - name: Claude remote-control (user service)
+      ansible.builtin.import_tasks: tasks/claude-remote-control.yml
 
     #   - ansible.builtin.import_tasks: tasks/packages.yml     # Phase 4
     #   - ansible.builtin.import_tasks: tasks/readme_steps.yml # Phase 5

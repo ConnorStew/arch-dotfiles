@@ -4,6 +4,11 @@
 
 discord_update_enabled: true   # both machines auto-update discord at boot
 
+# Claude remote-control user service — NOT installed anywhere by default. Opt in
+# per host in host_vars/<hostname>.yml with `claude_remote_control_enabled: true`,
+# which installs, enables, and starts it.
+claude_remote_control_enabled: false
+
 packages_common: [] # native pacman packages common to every machine
 aur_packages: [] # AUR packages (via yay / kewlfft.aur)
 flatpak_apps: [] # flatpak app IDs

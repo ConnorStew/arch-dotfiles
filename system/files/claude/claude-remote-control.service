@@ -7,3 +7,6 @@ WorkingDirectory=/home/connor/claude-remote
 ExecStart=/home/connor/.local/bin/claude remote-control --name "Connor's PC"
 Restart=on-failure
 RestartSec=10
+
+[Install]
+WantedBy=default.target
