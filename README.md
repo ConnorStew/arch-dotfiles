@@ -1,31 +1,20 @@
 # Arch Dotfiles & System Config
 
-My personal [Arch Linux](https://archlinux.org/) + [Hyprland](https://hyprland.org/)
-setup — the whole machine, reproducible and version-controlled. Not just `$HOME`
-dotfiles: package lists, root-owned system files, and service enables are managed
-too, so a fresh install can be brought back to a fully-configured desktop from
-this repo.
+My personal reproducible, version-controlled [Arch Linux](https://archlinux.org/) + [Hyprland](https://hyprland.org/) setup.
 
-Configured for two hosts: `archlaptop` (Intel laptop) and `ArchPC` (NVIDIA
-desktop).
+Used to manage package lists, services, and general config for both my laptop and my desktop computers.
 
-## The two layers
+I'd originally tried Nix to keep my desktop and laptop in sync. I disliked having to edit the config files for every change,
+so I went with Arch + this repo to give me the freedom to make changes on the fly while keeping important config synced.
 
-The repo is split by *who owns the file*, because the two halves want completely
-different tooling:
+## The management tooling
 
-| Layer | What it manages | How |
-|-------|-----------------|-----|
-| **`dotfiles/`** | `$HOME` config (`~/.config/...`, `~/.bashrc`, ...) | live-symlinked with [GNU Stow](https://www.gnu.org/software/stow/) |
-| **`system/`** | root files, package installs, service enables, per-host tweaks | a local [Ansible](https://www.ansible.com/) playbook |
+The repo is split between dotfiles that can be updated on the fly and services or items requiring root.
 
-**Why split them?** Stow is perfect for `$HOME` — symlink a package, edit the
-file in place, and the change is already in the repo. But it's the wrong tool for
-root-owned files (`sudo stow --target=/` symlinks system paths *back into* your
-repo, and things like `ProtectHome` services then can't read them). So anything
-outside `$HOME` — `/etc` files, `pacman`/AUR/Flatpak packages, `systemctl`
-enables, ssh permissions — is deployed by Ansible as root-owned **copies**
-instead, with per-host variables for the laptop and the desktop.
+| Tool | What it manages | Where |
+|------|-----------------|-------|
+| [GNU Stow](https://www.gnu.org/software/stow/)| `$HOME` config, symlinked into place | **`dotfiles/`** | 
+| [Ansible](https://www.ansible.com/) | root files, package installs, service enables, per-host tweaks |  **`system/`** |
 
 ## The stack
 
@@ -48,37 +37,11 @@ system/            # Ansible playbook for everything root-owned
   host_vars/       # per-machine overrides (laptop vs. desktop)
   tasks/           # sddm, packages, reflector, wallpaper timers, ...
 scripts/           # personal utility scripts (not stowed)
-notes/             # how-to docs — see below
+notes/             # how-to docs
 workarounds/       # documented fixes for hardware/driver quirks
 ```
-
-## Getting started
-
-The full walkthrough for bringing up a fresh machine — bootstrap yay, install the
-playbook tooling, stow the dotfiles, set up host vars, run Ansible — lives in
-[**notes/restoring-new-machine.md**](notes/restoring-new-machine.md).
-
-The short version, once the repo is cloned:
-
-```bash
-# 1. Dotfiles — stow every package ($HOME symlinks)
-cd ~/git/arch-dotfiles
-stow $(ls dotfiles)
-
-# 2. System — preview, then apply the Ansible layer
-cd system
-ansible-galaxy collection install -r requirements.yml   # once
-ansible-playbook site.yml --limit "$(uname -n)" --check --diff -K   # dry run
-ansible-playbook site.yml --limit "$(uname -n)" -K                  # apply
-```
-
-`.stowrc` sets `--dir=dotfiles` and points `--target` at the home directory, so
-stow runs bare from the repo root with just package names. `--limit "$(uname -n)"`
-scopes Ansible to the current host.
 
 ## Notes & workarounds
 
 The [`notes/`](notes/) and [`workarounds/`](workarounds/) directories are my own
-operational docs — new-machine bring-up, update routines, and fixes for various
-hardware/driver quirks.
-
+docs — new-machine bring-up, update routines, and fixes for various quirks.
