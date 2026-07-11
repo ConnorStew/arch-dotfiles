@@ -1,29 +1,84 @@
 # Arch Dotfiles & System Config
 
-Two layers:
+My personal [Arch Linux](https://archlinux.org/) + [Hyprland](https://hyprland.org/)
+setup — the whole machine, reproducible and version-controlled. Not just `$HOME`
+dotfiles: package lists, root-owned system files, and service enables are managed
+too, so a fresh install can be brought back to a fully-configured desktop from
+this repo.
 
-- **`dotfiles/`** — `$HOME` config, live-symlinked with [GNU stow](https://www.gnu.org/software/stow/). Edit in place; changes are reflected in the repo.
-- **`system/`** — everything else (root-level files, service enables, package installs, ssh perms) as a local Ansible playbook, with per-host vars for `archlaptop` and the desktop.
+Configured for two hosts: `archlaptop` (Intel laptop) and `ArchPC` (NVIDIA
+desktop).
 
-`.stowrc` sets `--dir=dotfiles --target=/home/connor`, so every stow command runs bare from the repo root with just package names.
+## The two layers
 
-## Scripts (`scripts/`)
+The repo is split by *who owns the file*, because the two halves want completely
+different tooling:
 
-Personal utility scripts — not stowed, run manually.
+| Layer | What it manages | How |
+|-------|-----------------|-----|
+| **`dotfiles/`** | `$HOME` config (`~/.config/...`, `~/.bashrc`, ...) | live-symlinked with [GNU Stow](https://www.gnu.org/software/stow/) |
+| **`system/`** | root files, package installs, service enables, per-host tweaks | a local [Ansible](https://www.ansible.com/) playbook |
 
-| Script | Description |
-|--------|-------------|
-| `sync-notes.sh` | Bidirectional rclone sync for Obsidian notes and DnD folder to Google Drive. Does a dry run first with confirmation. Usage: `./scripts/sync-notes.sh [obsidian\|dnd\|both]` |
+**Why split them?** Stow is perfect for `$HOME` — symlink a package, edit the
+file in place, and the change is already in the repo. But it's the wrong tool for
+root-owned files (`sudo stow --target=/` symlinks system paths *back into* your
+repo, and things like `ProtectHome` services then can't read them). So anything
+outside `$HOME` — `/etc` files, `pacman`/AUR/Flatpak packages, `systemctl`
+enables, ssh permissions — is deployed by Ansible as root-owned **copies**
+instead, with per-host variables for the laptop and the desktop.
 
-(System-management scripts live under `system/scripts/`, e.g. `check-drift.py` — see [Package drift](#package-drift).)
+## The stack
 
+- **Compositor** — Hyprland, with [hypridle](https://github.com/hyprwm/hypridle) + [hyprlock](https://github.com/hyprwm/hyprlock) for idle/lock
+- **Bar** — [Waybar](https://github.com/Alexays/Waybar)
+- **Launcher** — [wofi](https://hg.sr.ht/~scoopta/wofi)
+- **Notifications** — [mako](https://github.com/emersion/mako)
+- **Terminal** — [kitty](https://sw.kovidgoyal.org/kitty/)
+- **Display manager** — [SDDM](https://github.com/sddm/sddm) with the [astronaut theme](https://github.com/keyitdev/sddm-astronaut-theme), colour-matched to hyprlock
+- **Wallpapers** — [awww](https://github.com/LGFae/awww) with a script that cycles a random new one every 30 min
+- **Audio** — PipeWire
 
-## Workarounds
+## Repo layout
 
-See [`workarounds/`](workarounds/) for documented fixes to hardware/driver issues.
+```
+dotfiles/          # stow packages — one dir per app, targets $HOME
+  hypr/ waybar/ wofi/ mako/ kitty/ bash/ ssh/ ...
+system/            # Ansible playbook for everything root-owned
+  group_vars/      # package lists (source of truth) + shared config
+  host_vars/       # per-machine overrides (laptop vs. desktop)
+  tasks/           # sddm, packages, reflector, wallpaper timers, ...
+scripts/           # personal utility scripts (not stowed)
+notes/             # how-to docs — see below
+workarounds/       # documented fixes for hardware/driver quirks
+```
 
-- [Xbox Wireless Adapter](workarounds/xbox-wireless-adapter.md) — blacklists `mt76x2u` which incorrectly claims the dongle
-- [NordVPN xdg-open Terminal](workarounds/nordvpn-xdg-open-terminal.md) — browser login doesn't reach the app because `nordvpn.desktop` needs a terminal via `xdg-terminal-exec`
-- [Brave blurry bookmarks bar](workarounds/brave-blurry-bookmarks-bar.md)
-- [Voice-mode ALSA dsnoop](workarounds/voice-mode-alsa-dsnoop.md)
+## Getting started
+
+The full walkthrough for bringing up a fresh machine — bootstrap yay, install the
+playbook tooling, stow the dotfiles, set up host vars, run Ansible — lives in
+[**notes/restoring-new-machine.md**](notes/restoring-new-machine.md).
+
+The short version, once the repo is cloned:
+
+```bash
+# 1. Dotfiles — stow every package ($HOME symlinks)
+cd ~/git/arch-dotfiles
+stow $(ls dotfiles)
+
+# 2. System — preview, then apply the Ansible layer
+cd system
+ansible-galaxy collection install -r requirements.yml   # once
+ansible-playbook site.yml --limit "$(uname -n)" --check --diff -K   # dry run
+ansible-playbook site.yml --limit "$(uname -n)" -K                  # apply
+```
+
+`.stowrc` sets `--dir=dotfiles` and points `--target` at the home directory, so
+stow runs bare from the repo root with just package names. `--limit "$(uname -n)"`
+scopes Ansible to the current host.
+
+## Notes & workarounds
+
+The [`notes/`](notes/) and [`workarounds/`](workarounds/) directories are my own
+operational docs — new-machine bring-up, update routines, and fixes for various
+hardware/driver quirks.
 
