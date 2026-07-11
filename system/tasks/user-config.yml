@@ -1,0 +1,47 @@
+---
+# User-level config. Runs as the connor user (no become): ssh permissions,
+# systemd --user unit files, and their enables.
+
+# SSH refuses to use config files with loose permissions. ~/.ssh/config is a stow
+# symlink into the repo, so `follow: true` sets the mode on the real file.
+- name: Secure ~/.ssh directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Secure ~/.ssh/config
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/config"
+    mode: "0600"
+    follow: true
+
+# systemd --user unit files (no become — they live under the connor user's home).
+- name: Ensure ~/.config/systemd/user exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user"
+    state: directory
+    mode: "0755"
+
+- name: Deploy wallpaper-cycle user units
+  ansible.builtin.copy:
+    src: "files/wallpaper-cycle/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/{{ item }}"
+    mode: "0644"
+    follow: false        # replace a leftover stow symlink, don't write through it
+  loop:
+    - wallpaper-cycle.service
+    - wallpaper-cycle.timer
+
+# Enables (no become; uses the connor user's session manager). wallpaper-cycle.timer
+# was just (re)deployed above, so reload the user daemon before enabling it.
+- name: Enable user timers and services
+  ansible.builtin.systemd_service:
+    name: "{{ item.name }}"
+    enabled: true
+    scope: user
+    daemon_reload: "{{ item.reload | default(false) }}"
+  loop:
+    - { name: arch-update.timer }
+    - { name: arch-update-tray.service }
+    - { name: wallpaper-cycle.timer, reload: true }

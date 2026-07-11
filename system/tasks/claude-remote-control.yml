@@ -1,0 +1,28 @@
+---
+# Claude Code remote-control — a systemd --user service (NOT root), for phone
+# access via the Claude mobile app. NOT installed at all by default; a host opts
+# in with `claude_remote_control_enabled: true` in host_vars, and then it is
+# installed, enabled, and started.
+- name: Manage claude-remote-control user service
+  when: claude_remote_control_enabled | default(false)
+  block:
+    - name: Ensure user systemd unit dir exists
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user"
+        state: directory
+        mode: "0755"
+
+    - name: Copy claude-remote-control user service
+      ansible.builtin.copy:
+        src: files/claude/claude-remote-control.service
+        dest: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/claude-remote-control.service"
+        mode: "0644"
+        follow: false        # replace a leftover stow symlink, don't write through it
+
+    - name: Enable and start claude-remote-control
+      ansible.builtin.systemd_service:
+        name: claude-remote-control.service
+        scope: user
+        enabled: true
+        state: started
+        daemon_reload: true

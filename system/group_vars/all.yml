@@ -1,0 +1,116 @@
+---
+# Shared across all hosts.
+# Per-host overrides/additions live in host_vars/<hostname>.yml.
+
+discord_update_enabled: true   # both machines auto-update discord at boot
+
+# Claude remote-control user service — NOT installed anywhere by default. Opt in
+# per host in host_vars/<hostname>.yml with `claude_remote_control_enabled: true`,
+# which installs, enables, and starts it.
+claude_remote_control_enabled: false
+
+# --- Packages --------------------------------------------------------------
+# These vars are the source of truth (packages/dump.sh is gone). `system/scripts/check-drift.py`
+# diffs them against what's actually installed. Add host-only packages to
+# host_vars/<hostname>.yml (packages_host / aur_host).
+
+# Native pacman packages we deliberately add, installed by tasks/packages.yml.
+# The Arch install-time baseline (base, linux, grub, sudo, networkmanager, …) is
+# intentionally omitted — a fresh install already provides it, and check-drift's
+# BASE set ignores it.
+packages_common:
+  - alsa-utils
+  - ansible
+  - ansible-lint
+  - aws-cli-v2
+  - awww
+  - breeze-gtk
+  - brightnessctl
+  - cloud-image-utils
+  - discord
+  - dnsmasq
+  - docker
+  - docker-compose
+  - dolphin
+  - ex-vi-compat
+  - fastfetch
+  - ffmpegthumbs
+  - flatpak
+  - fsarchiver
+  - git
+  - godot
+  - haruna
+  - hypridle
+  - hyprland
+  - hyprlock
+  - hyprshot
+  - imv
+  - jq
+  - kitty
+  - libvirt
+  - mako
+  - mpv
+  - nodejs
+  - npm
+  - obs-studio
+  - obsidian
+  - okular
+  - otf-font-awesome
+  - papirus-icon-theme
+  - pavucontrol
+  - pipewire-pulse
+  - qemu-full
+  - qt6ct
+  - rclone
+  - reflector
+  - rsync
+  - sddm
+  - sshpass
+  - steam
+  - stow
+  - testdisk
+  - timeshift
+  - ttf-droid
+  - ttf-jetbrains-mono-nerd
+  - unzip
+  - virt-install
+  - virt-manager
+  - waybar
+  - weston
+  - woff2-font-awesome
+  - wofi
+  - xdg-desktop-portal-gtk
+  - xdg-desktop-portal-hyprland
+  - zip
+  - kubectl
+  - helm
+
+# AUR packages are ALWAYS installed manually with `yay -S <pkg>` so the PKGBUILD
+# can be reviewed before each build — tasks/packages.yml only *lists* them and
+# reports which are missing, it never builds anything. `yay` itself is the
+# fresh-install bootstrap (git clone + makepkg, since makepkg refuses to run as
+# root); it's listed here only so check-drift stays quiet.
+aur_packages:
+  - arch-update
+  - butler
+  - claudebar
+  - nordvpn-gui-bin
+  - sddm-astronaut-theme
+  - visual-studio-code-bin
+  - yay
+
+# Flatpak app IDs (installed --user from Flathub).
+flatpak_apps:
+  - com.brave.Browser
+  - com.spotify.Client
+  - org.gnome.Calculator
+
+# Flatpak apps that need a forced dark GTK theme (see CLAUDE.md "Flatpak Notes").
+flatpak_gtk_dark:
+  - com.brave.Browser
+  - com.spotify.Client
+
+# Global npm packages. node-gyp/nopt/semver/npm show up under `npm ls -g` too but
+# are npm's own bundled deps, not things we install — only real globals go here.
+npm_globals:
+  - "@anthropic-ai/claude-code"

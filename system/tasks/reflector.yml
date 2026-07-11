@@ -1,0 +1,17 @@
+---
+# reflector mirrorlist config + timer.
+- name: Copy reflector config
+  ansible.builtin.copy:
+    src: files/reflector.conf
+    dest: /etc/xdg/reflector/reflector.conf
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+
+- name: Enable reflector timer
+  ansible.builtin.systemd_service:
+    name: reflector.timer
+    enabled: true
+  become: true

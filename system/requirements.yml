@@ -1,0 +1,4 @@
+# Bootstrap: ansible-galaxy collection install -r requirements.yml
+collections:
+  - name: community.general   # pacman, flatpak, npm, systemd modules
+  - name: kewlfft.aur         # AUR packages via yay

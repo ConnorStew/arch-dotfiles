@@ -1,0 +1,12 @@
+---
+
+xone_enabled: true          # desktop uses the Xbox wireless adapter
+sddm_greeter_weston: true   # desktop needs the HDMI-A-1-off greeter workaround
+
+packages_host:
+  - nvidia-container-toolkit
+  - nvidia-open
+  - nvidia-settings
+  - nvidia-utils
+aur_host:
+  - xone-dkms-git

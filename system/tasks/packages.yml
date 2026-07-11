@@ -1,0 +1,85 @@
+---
+# Packages: native (pacman), AUR (manual/report-only), flatpak, npm globals.
+# Vars live in group_vars/all.yml and host_vars/<hostname>.yml.
+
+# --- Native (pacman) -------------------------------------------------------
+- name: Enable the multilib repository
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '^#\[multilib\]\n#Include = /etc/pacman\.d/mirrorlist'
+    replace: "[multilib]\nInclude = /etc/pacman.d/mirrorlist"
+  become: true
+  notify: Update pacman cache
+
+# Make sure a just-enabled multilib is synced before installing (e.g. steam),
+# rather than waiting for the flushed handler at end of play.
+- name: Flush handlers so pacman cache is current
+  ansible.builtin.meta: flush_handlers
+
+- name: Install native packages
+  community.general.pacman:
+    name: "{{ packages_common + packages_host }}"
+    state: present
+  become: true
+
+# --- AUR (manual, report-only) ---------------------------------------------
+# Deliberately NOT installed by Ansible: AUR builds run by hand with `yay -S`
+# so every PKGBUILD can be reviewed. We only surface what's declared-but-missing.
+- name: Query explicitly-installed AUR packages
+  ansible.builtin.command: pacman -Qemq
+  register: aur_installed
+  changed_when: false
+  check_mode: false
+  failed_when: false
+
+- name: Report AUR packages needing manual installation
+  ansible.builtin.debug:
+    msg: >-
+      {{ aur_missing | length }} declared AUR package(s) not installed —
+      install by hand with `yay -S {{ aur_missing | join(' ') }}` so you can
+      review each PKGBUILD.
+  vars:
+    aur_missing: "{{ (aur_packages + aur_host) | difference(aur_installed.stdout_lines) }}"
+  when: aur_missing | length > 0
+
+# --- Flatpak ---------------------------------------------------------------
+- name: Ensure Flathub remote (system)
+  community.general.flatpak_remote:
+    name: flathub
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    method: system
+  become: true
+
+- name: Install Flatpak apps (system)
+  community.general.flatpak:
+    name: "{{ flatpak_apps }}"
+    remote: flathub
+    method: system
+  become: true
+  when: flatpak_apps | length > 0
+
+- name: Read current Flatpak overrides
+  ansible.builtin.command: "flatpak override --user --show {{ item }}"
+  register: flatpak_overrides
+  changed_when: false
+  check_mode: false
+  loop: "{{ flatpak_gtk_dark }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: Force dark GTK theme for Flatpak apps
+  ansible.builtin.command: "flatpak override --user --env=GTK_THEME=Adwaita:dark {{ item.item }}"
+  when: "'GTK_THEME=Adwaita:dark' not in item.stdout"
+  changed_when: true
+  loop: "{{ flatpak_overrides.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+# --- npm globals -----------------------------------------------------------
+- name: Install global npm packages
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+    state: present
+  become: true
+  loop: "{{ npm_globals }}"
