@@ -1,6 +1,6 @@
 # Arch Dotfiles & System Config
 
-My personal reproducible, version-controlled [Arch Linux](https://archlinux.org/) + [Hyprland](https://hyprland.org/) setup.
+My personal, reproducible, version-controlled [Arch Linux](https://archlinux.org/) + [Hyprland](https://hyprland.org/) setup.
 
 Used to manage package lists, services, and general config for both my laptop and my desktop computers.
 
