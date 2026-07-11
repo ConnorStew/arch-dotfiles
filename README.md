@@ -22,7 +22,7 @@ Personal utility scripts — not stowed, run manually.
 `.stowrc` supplies `--dir`/`--target`, so no flags are needed:
 
 ```bash
-cd ~/git/arch-config
+cd ~/git/arch-dotfiles
 stow hypr            # (re)stow a package
 stow -D hypr         # unstow
 stow -n hypr -v      # simulate
@@ -31,7 +31,7 @@ stow -n hypr -v      # simulate
 Stow or unstow **all** packages at once (`ls dotfiles` supplies the package names, since `.stowrc` already sets `--dir=dotfiles`):
 
 ```bash
-cd ~/git/arch-config
+cd ~/git/arch-dotfiles
 stow $(ls dotfiles)      # stow every package
 stow -D $(ls dotfiles)   # unstow every package
 stow -R $(ls dotfiles)   # restow (unstow + stow) every package
@@ -142,7 +142,7 @@ Start from a standard Arch **base** install (via `archinstall` or manual `pacstr
 
 ```bash
 sudo pacman -S --needed git
-git clone git@github.com:ConnorStew/arch-config.git ~/git/arch-config
+git clone git@github.com:ConnorStew/arch-dotfiles.git ~/git/arch-dotfiles
 ```
 
 ### 2. Bootstrap yay (AUR helper)
@@ -159,13 +159,13 @@ cd yay && makepkg -si
 
 ```bash
 sudo pacman -S --needed ansible stow
-ansible-galaxy collection install -r ~/git/arch-config/system/requirements.yml
+ansible-galaxy collection install -r ~/git/arch-dotfiles/system/requirements.yml
 ```
 
 ### 4. Stow the dotfiles
 
 ```bash
-cd ~/git/arch-config
+cd ~/git/arch-dotfiles
 stow alsa bash hypr kitty mako mimeapps ssh waybar wofi xdg-desktop-portal xdg-terminals
 ```
 

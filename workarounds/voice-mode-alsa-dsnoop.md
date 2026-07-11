@@ -45,7 +45,7 @@ ctl.!default {
 
 Managed via stow from the `alsa/` package in this repo:
 ```bash
-cd ~/git/arch-config
+cd ~/git/arch-dotfiles
 stow --target=/home/connor alsa
 ```
 
