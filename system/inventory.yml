@@ -5,8 +5,7 @@ all:
   hosts:
     archlaptop:
       ansible_connection: local
-    # TODO: add the desktop once its hostname is known, e.g.:
-    # archdesktop:
-    #   ansible_connection: local
+    ArchPC:
+      ansible_connection: local
   vars:
     ansible_python_interpreter: /usr/bin/python3

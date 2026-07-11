@@ -82,6 +82,8 @@ packages_common:
   - xdg-desktop-portal-gtk
   - xdg-desktop-portal-hyprland
   - zip
+  - kubectl
+  - helm
 
 # AUR packages are ALWAYS installed manually with `yay -S <pkg>` so the PKGBUILD
 # can be reviewed before each build — tasks/packages.yml only *lists* them and
@@ -95,8 +97,6 @@ aur_packages:
   - nordvpn-gui-bin
   - sddm-astronaut-theme
   - visual-studio-code-bin
-  - xdg-terminal-exec
-  - xone-dkms-git
   - yay
 
 # Flatpak app IDs (installed --user from Flathub).

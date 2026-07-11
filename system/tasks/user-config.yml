@@ -10,11 +10,18 @@
     state: directory
     mode: "0700"
 
+# TODO: Check what I'm using this for on the laptop.
+- name: Check if ~/.ssh/config exists
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/config"
+  register: ssh_config_stat
+
 - name: Secure ~/.ssh/config
   ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.ssh/config"
     mode: "0600"
     follow: true
+  when: ssh_config_stat.stat.exists
 
 # systemd --user unit files (no become — they live under the connor user's home).
 - name: Ensure ~/.config/systemd/user exists

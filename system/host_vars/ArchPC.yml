@@ -1,15 +1,12 @@
 ---
-# TEMPLATE — rename to <desktop-hostname>.yml on the desktop (must match `uname -n`)
-# and add that hostname to inventory.yml.
 
-# Phase 3 gating:
 xone_enabled: true          # desktop uses the Xbox wireless adapter
 sddm_greeter_weston: true   # desktop needs the HDMI-A-1-off greeter workaround
 
-# Phase 4 — host-specific packages (derived from the desktop's `pacman -Qenq`):
 packages_host:
   - nvidia-container-toolkit
   - nvidia-open
   - nvidia-settings
   - nvidia-utils
-aur_host: []
+aur_host:
+  - xone-dkms-git
