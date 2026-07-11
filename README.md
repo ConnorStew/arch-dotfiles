@@ -117,7 +117,7 @@ flatpak update
 ### 5. Update npm globals
 
 ```bash
-sudo npm update -g
+sudo npm update -g --allow-scripts=@anthropic-ai/claude-code
 ```
 
 ### 6. Reconcile the package vars
