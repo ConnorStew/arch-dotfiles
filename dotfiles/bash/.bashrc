@@ -10,7 +10,11 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+
+# Fixing display issues when sshing using kitty.
+[[ "$TERM" == "xterm-kitty" ]] && alias ssh='kitten ssh'
+
 PS1='[\u@\h \W]\$ '
 
-# FIxing annyoing warning in claude code for install location.
+# Fixing annyoing warning in claude code for install location.
 export PATH="$HOME/.local/bin:$PATH"
