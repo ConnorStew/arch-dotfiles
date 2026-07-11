@@ -15,6 +15,3 @@ alias grep='grep --color=auto'
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='kitten ssh'
 
 PS1='[\u@\h \W]\$ '
-
-# Fixing annyoing warning in claude code for install location.
-export PATH="$HOME/.local/bin:$PATH"
