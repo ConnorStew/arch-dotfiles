@@ -86,6 +86,7 @@ packages_common:
   - helm
   - git-filter-repo
   - github-cli
+  - bitwarden
 
 # AUR packages are ALWAYS installed manually with `yay -S <pkg>` so the PKGBUILD
 # can be reviewed before each build — tasks/packages.yml only *lists* them and
