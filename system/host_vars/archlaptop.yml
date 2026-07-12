@@ -5,6 +5,7 @@ xone_enabled: false # laptop doesn't use the Xbox wireless adapter
 # Host-specific packages
 packages_host:
   - intel-ucode      # Intel CPU microcode (desktop uses nvidia/amd set instead)
+  - sof-firmware     # Alder Lake-N audio DSP firmware — without it sof-audio-pci-intel-tgl fails to probe and PipeWire only shows Dummy Output
   - zram-generator
 aur_host:
   - xdg-terminal-exec
