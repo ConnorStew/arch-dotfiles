@@ -8,5 +8,6 @@ packages_host:
   - nvidia-open
   - nvidia-settings
   - nvidia-utils
+  - libreoffice-still
 aur_host:
   - xone-dkms-git
