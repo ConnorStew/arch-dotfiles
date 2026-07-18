@@ -54,3 +54,21 @@
   when: >-
     ('"OperatorUser": "' ~ ansible_facts['user_id'] ~ '"') not in (ts_prefs.stdout | default(''))
   changed_when: true
+
+# Adds an advertised subnet routes on this node.
+# These must be approved in the web UI.
+- name: Advertise subnet routes over Tailscale
+  become: true
+  ansible.builtin.command: >
+    tailscale set --advertise-routes={{ tailscale_advertise_routes }}
+  when:
+    - tailscale_advertise_routes | length > 0
+    - tailscale_advertise_routes not in (ts_prefs.stdout | default(''))
+  changed_when: true
+
+# Accept subnet routes advertised by other nodes.
+- name: Accept subnet routes advertised over Tailscale
+  become: true
+  ansible.builtin.command: tailscale set --accept-routes
+  when: '''"RouteAll": true'' not in (ts_prefs.stdout | default(''))'
+  changed_when: true

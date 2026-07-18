@@ -3,6 +3,9 @@
 xone_enabled: true          # desktop uses the Xbox wireless adapter
 sddm_greeter_weston: true   # desktop needs the HDMI-A-1-off greeter workaround
 
+# Expose the libvirt/QEMU VM network (192.168.122.0/24) to the tailnet
+tailscale_advertise_routes: "192.168.122.0/24"
+
 packages_host:
   - nvidia-container-toolkit
   - nvidia-open

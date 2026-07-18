@@ -9,6 +9,11 @@ discord_update_enabled: true   # both machines auto-update discord at boot
 # which installs, enables, and starts it.
 claude_remote_control_enabled: false
 
+# Subnet routes to advertise over Tailscale (tasks/tailscale.yml). Empty = don't
+# advertise anything; set per host in host_vars/<hostname>.yml. Advertised routes
+# still need approval in the Tailscale admin console before they actually route.
+tailscale_advertise_routes: ""
+
 # --- Packages --------------------------------------------------------------
 # These vars are the source of truth (packages/dump.sh is gone). `system/scripts/check-drift.py`
 # diffs them against what's actually installed. Add host-only packages to
