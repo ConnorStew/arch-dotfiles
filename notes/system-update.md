@@ -9,7 +9,12 @@ Always take a snapshot before a full update, especially if the kernel, NVIDIA, o
 sudo timeshift --create --comments "Before full system update"
 ```
 
-Delete it once the system is confirmed stable after reboot.
+Delete it once the system is confirmed stable after reboot:
+
+```shell
+sudo timeshift --list
+timeshift --delete  --snapshot '<name>'
+```
 
 ## 2. Update native packages
 
