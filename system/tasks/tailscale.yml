@@ -5,6 +5,21 @@
     state: started
     enabled: true
 
+- name: Enable systemd-resolved for MagicDNS
+  become: true
+  ansible.builtin.systemd_service:
+    name: systemd-resolved
+    state: started
+    enabled: true
+
+- name: Point /etc/resolv.conf at the resolved stub
+  become: true
+  ansible.builtin.file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: true
+
 - name: Check tailscale status
   ansible.builtin.command: tailscale status --json
   register: ts_status
@@ -33,7 +48,6 @@
     tailscale up
       --auth-key={{ ts_prompt.user_input }}
       --hostname={{ inventory_hostname }}
-      --accept-dns=false
   when:
     - ts_needs_login
     - not ansible_check_mode
@@ -72,4 +86,13 @@
   ansible.builtin.command: tailscale set --accept-routes
   when: >-
     '"RouteAll": true' not in (ts_prefs.stdout | default(''))
+  changed_when: true
+
+# Accept MagicDNS from the coordination server (resolves *.tail15b4a1.ts.net).
+# Idempotent for nodes that were already up before --accept-dns was flipped on.
+- name: Accept Tailscale MagicDNS
+  become: true
+  ansible.builtin.command: tailscale set --accept-dns=true
+  when: >-
+    '"CorpDNS": true' not in (ts_prefs.stdout | default(''))
   changed_when: true
