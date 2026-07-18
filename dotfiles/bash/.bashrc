@@ -15,3 +15,6 @@ alias grep='grep --color=auto'
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='kitten ssh'
 
 PS1='[\u@\h \W]\$ '
+
+# Exporting .local/bin for claude code.
+export PATH="$HOME/.local/bin:$PATH"
