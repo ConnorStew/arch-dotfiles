@@ -39,3 +39,18 @@
     - not ansible_check_mode
   changed_when: true
   no_log: true
+
+- name: Check current Tailscale operator
+  ansible.builtin.command: tailscale debug prefs
+  register: ts_prefs
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Allow the local user to operate Tailscale without sudo
+  become: true
+  ansible.builtin.command: >
+    tailscale set --operator={{ ansible_facts['user_id'] }}
+  when: >-
+    ('"OperatorUser": "' ~ ansible_facts['user_id'] ~ '"') not in (ts_prefs.stdout | default(''))
+  changed_when: true
