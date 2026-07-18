@@ -1,0 +1,41 @@
+- name: Enable tailscale service
+  become: true
+  ansible.builtin.systemd_service:
+    name: tailscaled
+    state: started
+    enabled: true
+
+- name: Check tailscale status
+  ansible.builtin.command: tailscale status --json
+  register: ts_status
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Decide whether login is needed
+  ansible.builtin.set_fact:
+    ts_needs_login: >-
+      {{ (ts_status.stdout | default('{}') | from_json).BackendState
+         | default('NoState') != 'Running' }}
+
+- name: Prompt for Tailscale auth key
+  ansible.builtin.pause:
+    prompt: "{{ inventory_hostname }} needs Tailscale login — paste auth key"
+    echo: false
+  register: ts_prompt
+  when:
+    - ts_needs_login
+    - not ansible_check_mode
+
+- name: Bring tailscale up
+  become: true
+  ansible.builtin.command: >
+    tailscale up
+      --auth-key={{ ts_prompt.user_input }}
+      --hostname={{ inventory_hostname }}
+      --accept-dns=false
+  when:
+    - ts_needs_login
+    - not ansible_check_mode
+  changed_when: true
+  no_log: true

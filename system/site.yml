@@ -37,6 +37,8 @@
       ansible.builtin.import_tasks: tasks/packages.yml
     - name: User-level config (ssh perms, user units)
       ansible.builtin.import_tasks: tasks/user-config.yml
+    - name: Enable tailscale
+      ansible.builtin.import_tasks: tasks/tailscale.yml
 
   handlers:
     - name: Reload systemd
