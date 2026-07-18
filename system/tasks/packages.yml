@@ -82,7 +82,7 @@
 # by Ansible (same stance as AUR PKGBUILDs). We only surface it when missing.
 - name: Check for the Claude Code binary
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.local/bin/claude"
+    path: "{{ ansible_facts['user_dir'] }}/.local/bin/claude"
   register: claude_bin
 
 - name: Report Claude Code needs manual installation
