@@ -79,14 +79,14 @@ Task files (`system/tasks/`):
 - `discord-update.yml` — copies units → `/etc/systemd/system/` + enables the timer, gated on `discord_update_enabled` (default true). Runs `pacman -Sy discord` 30s after boot.
 - `tailscale.yml` — enables `tailscaled`, brings the node up (prompting for an auth key only when `tailscale status` shows it isn't `Running`), and runs `tailscale set --operator={{ ansible_facts['user_id'] }}` so the local user can control Tailscale without `sudo` (the [documented method](https://tailscale.com/docs/reference/troubleshooting/linux/linux-operator-permission)). The operator step is idempotent: it greps `tailscale debug prefs` for `"OperatorUser": "<user>"` (the key is `omitempty`, so it's absent until set) and skips when already correct.
 - `reflector.yml` — copies `reflector.conf` → `/etc/xdg/reflector/` + enables the timer. (Was always a copy, never stow: the reflector service uses `ProtectHome=true`, which blocks symlinks into `/home`.)
-- `claude-remote-control.yml` — gated on `claude_remote_control_enabled` (default false — opt in per host); when enabled it copies `claude-remote-control.service` → `~/.config/systemd/user/` and enables + starts it. Runs `claude remote-control` for phone access via the Claude mobile app. `claude` is npm-managed (`@anthropic-ai/claude-code`), NOT AUR.
+- `claude-remote-control.yml` — gated on `claude_remote_control_enabled` (default false — opt in per host); when enabled it copies `claude-remote-control.service` → `~/.config/systemd/user/` and enables + starts it. Runs `claude remote-control` for phone access via the Claude mobile app. `claude` is installed via its native user-local installer into `~/.local/bin` (NOT npm or AUR); the unit's `ExecStart` calls `/home/connor/.local/bin/claude` by absolute path, so it doesn't rely on PATH.
 - `user-config.yml` — ssh perms (see `ssh/` above); deploys the `wallpaper-cycle.{service,timer}` user units (from `system/files/wallpaper-cycle/`) into `~/.config/systemd/user/`; and enables the user timers/services `arch-update.timer`, `arch-update-tray.service`, `wallpaper-cycle.timer`.
 - `packages.yml` — see Packages below.
 
 ## Packages (Ansible vars)
 
 Package lists live in `system/group_vars/all.yml` (`packages_common`,
-`aur_packages`, `flatpak_apps`, `flatpak_gtk_dark`, `npm_globals`) and
+`aur_packages`, `flatpak_apps`, `flatpak_gtk_dark`) and
 `system/host_vars/<hostname>.yml` (`packages_host`, `aur_host`). These vars are
 the source of truth — the old `packages/` dir with `pkglist*.txt` and `dump.sh`
 is gone.
@@ -94,12 +94,13 @@ is gone.
 - **Native** (`packages.yml` → `community.general.pacman`): `packages_common + packages_host`. Multilib is enabled by the playbook (for Steam) via a `replace` on `/etc/pacman.conf`. The Arch install-time baseline (`base`, `linux`, `grub`, `sudo`, `networkmanager`, …) is deliberately NOT declared — a fresh install already has it.
 - **AUR** is **always installed manually** with `yay -S <pkg>` so the PKGBUILD can be reviewed. The playbook only *lists* the declared-but-missing ones (`Report AUR packages needing manual installation` task) — it never builds anything. `yay` itself is a one-time git-clone bootstrap (makepkg refuses to run as root).
 - **Flatpak**: `flatpak_apps` installed `--system` from Flathub. `flatpak_gtk_dark` apps get a `GTK_THEME=Adwaita:dark` `--user` override (currently Brave + Spotify; see Flatpak Notes).
-- **npm globals**: `npm_globals` (just `@anthropic-ai/claude-code`).
+- **Claude Code**: installed via its native user-local installer (`curl -fsSL https://claude.ai/install.sh | bash`) into `~/.local/bin`, **not** npm or AUR — this avoids the pacman-`npm` file conflict that npm globals in `/usr/lib/node_modules` cause, and needs no root. `packages.yml` is report-only: it `stat`s `~/.local/bin/claude` and prints the install command if missing (never auto-execs the remote script, same stance as AUR). Updates via `claude update`.
 
 `system/scripts/check-drift.py` diffs the vars against what's actually installed
-(native `pacman -Qenq`, AUR `pacman -Qemq`, flatpak, npm globals) in both
+(native `pacman -Qenq`, AUR `pacman -Qemq`, flatpak) in both
 directions, ignoring the Arch baseline and `*-debug` packages. Run it after
 installing something new: add it to the right var, then confirm it's in sync.
+(Claude Code is not tracked here — it's a standalone user-local binary.)
 
 ## Flatpak Notes
 

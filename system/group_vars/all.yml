@@ -118,8 +118,3 @@ flatpak_apps:
 flatpak_gtk_dark:
   - com.brave.Browser
   - com.spotify.Client
-
-# Global npm packages. node-gyp/nopt/semver/npm show up under `npm ls -g` too but
-# are npm's own bundled deps, not things we install — only real globals go here.
-npm_globals:
-  - "@anthropic-ai/claude-code"

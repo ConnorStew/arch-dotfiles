@@ -1,5 +1,6 @@
 ---
-# Packages: native (pacman), AUR (manual/report-only), flatpak, npm globals.
+# Packages: native (pacman), AUR (manual/report-only), flatpak.
+# Claude Code (native installer, report-only).
 # Vars live in group_vars/all.yml and host_vars/<hostname>.yml.
 
 # --- Native (pacman) -------------------------------------------------------
@@ -75,11 +76,18 @@
   loop_control:
     label: "{{ item.item }}"
 
-# --- npm globals -----------------------------------------------------------
-- name: Install global npm packages
-  community.general.npm:
-    name: "{{ item }}"
-    global: true
-    state: present
-  become: true
-  loop: "{{ npm_globals }}"
+# --- Claude Code (native installer, report-only) ---------------------------
+# Installed to ~/.local/bin via the native installer, NOT npm or AUR — kept out
+# of the playbook's auto-exec so a remote shell script is never piped into bash
+# by Ansible (same stance as AUR PKGBUILDs). We only surface it when missing.
+- name: Check for the Claude Code binary
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.local/bin/claude"
+  register: claude_bin
+
+- name: Report Claude Code needs manual installation
+  ansible.builtin.debug:
+    msg: >-
+      claude not found at ~/.local/bin/claude — install by hand with
+      `curl -fsSL https://claude.ai/install.sh | bash`2
+  when: not claude_bin.stat.exists

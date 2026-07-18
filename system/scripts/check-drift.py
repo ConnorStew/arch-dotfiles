@@ -9,9 +9,10 @@ this script simply flags either direction of drift:
   - declared but NOT installed  (something the playbook would install is missing)
   - installed but NOT declared  (something added ad hoc that isn't tracked)
 
-It checks native pacman packages, AUR packages, flatpak apps, and global npm
-packages. Some known-noise entries (the Arch baseline, ``*-debug`` AUR packages,
-npm's own bundled deps) are ignored so real drift stands out.
+It checks native pacman packages, AUR packages, and flatpak apps. Some
+known-noise entries (the Arch baseline, ``*-debug`` AUR packages) are ignored so
+real drift stands out. Claude Code is installed via its native user-local
+installer (not npm/AUR), so it's not tracked here.
 
 Usage:
     system/scripts/check-drift.py
@@ -20,7 +21,6 @@ Exit status is 0 when everything is in sync, 1 when any drift is found.
 """
 from __future__ import annotations
 
-import os
 import platform
 import subprocess
 import sys
@@ -55,9 +55,6 @@ BASE: set[str] = {
     "openssh",
     "wpa_supplicant",
 }
-
-# npm reports its own bundled dependencies alongside real globals, so ignore them.
-NPM_BUNDLED: set[str] = {"npm", "node-gyp", "nopt", "semver"}
 
 # A loaded YAML vars file is a plain mapping of var name -> value.
 VarsFile = dict[str, Any]
@@ -98,9 +95,9 @@ def declared(sources: list[VarsFile], *keys: str) -> set[str]:
 def installed(cmd: list[str]) -> set[str]:
     """Run a query command and return its whitespace-split stdout as a set.
 
-    Used for the package managers that print one item per line (pacman, flatpak,
-    npm). A failing command yields an empty set rather than raising, so a machine
-    lacking e.g. flatpak simply reports everything as "not installed".
+    Used for the package managers that print one item per line (pacman,
+    flatpak). A failing command yields an empty set rather than raising, so a
+    machine lacking e.g. flatpak simply reports everything as "not installed".
     """
     result = subprocess.run(cmd, capture_output=True, text=True)
     return set(result.stdout.split())
@@ -163,14 +160,6 @@ def main() -> None:
         declared(sources, "flatpak_apps"),
         installed(["flatpak", "list", "--app", "--columns=application"]),
     )
-
-    # npm globals: `--parseable` prints install paths, so compare by the final
-    # path component. That also drops the scope from names like
-    # "@anthropic-ai/claude-code" on both sides, letting them match.
-    npm_paths = installed(["npm", "ls", "-g", "--parseable", "--depth=0"])
-    npm_installed = {os.path.basename(p) for p in npm_paths if "node_modules" in p}
-    npm_declared = {name.split("/")[-1] for name in declared(sources, "npm_globals")}
-    drift |= report("npm", npm_declared, npm_installed, ignore=NPM_BUNDLED)
 
     sys.exit(1 if drift else 0)
 

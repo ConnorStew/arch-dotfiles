@@ -38,13 +38,7 @@ yay will show diffs for changed PKGBUILDs. Review before confirming.
 flatpak update
 ```
 
-## 5. Update npm globals
-
-```bash
-sudo npm update -g --allow-scripts=@anthropic-ai/claude-code
-```
-
-## 6. Reconcile the package vars
+## 5. Reconcile the package vars
 
 If the update added or removed anything you want tracked, edit the vars and confirm with:
 
