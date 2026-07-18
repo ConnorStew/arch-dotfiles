@@ -5,21 +5,6 @@
     state: started
     enabled: true
 
-- name: Enable systemd-resolved for MagicDNS
-  become: true
-  ansible.builtin.systemd_service:
-    name: systemd-resolved
-    state: started
-    enabled: true
-
-- name: Point /etc/resolv.conf at the resolved stub
-  become: true
-  ansible.builtin.file:
-    src: /run/systemd/resolve/stub-resolv.conf
-    dest: /etc/resolv.conf
-    state: link
-    force: true
-
 - name: Check tailscale status
   ansible.builtin.command: tailscale status --json
   register: ts_status
