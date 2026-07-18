@@ -70,5 +70,6 @@
 - name: Accept subnet routes advertised over Tailscale
   become: true
   ansible.builtin.command: tailscale set --accept-routes
-  when: '''"RouteAll": true'' not in (ts_prefs.stdout | default(''))'
+  when: >-
+    '"RouteAll": true' not in (ts_prefs.stdout | default(''))
   changed_when: true
