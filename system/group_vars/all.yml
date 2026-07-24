@@ -93,6 +93,7 @@ packages_common:
   - github-cli
   - bitwarden
   - tailscale
+  - xclip # Reads the X11 clipboard for hyprland.conf's $clipsync (SUPER SHIFT V)
 
 # AUR packages are ALWAYS installed manually with `yay -S <pkg>` so the PKGBUILD
 # can be reviewed before each build — tasks/packages.yml only *lists* them and
