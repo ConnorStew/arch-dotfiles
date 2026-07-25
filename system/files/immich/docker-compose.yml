@@ -19,6 +19,8 @@ services:
     volumes:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
+      # External library — read-only, Immich must never write to the originals.
+      - ${EXTERNAL_LIBRARY_LOCATION}:/my-external-library:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env
