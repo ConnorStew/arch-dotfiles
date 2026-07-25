@@ -33,6 +33,18 @@
     - wallpaper-cycle.service
     - wallpaper-cycle.timer
 
+# arch-update 4.0.0 dropped arch-update-tray.service — the package now ships only
+# arch-update.{service,timer} under /usr/lib/systemd/user/, with the tray reduced to
+# a NoDisplay .desktop stub in /usr/share/applications/. Nothing replaces the enable
+# here: the tray is started by `exec-once = arch-update --tray` in hyprland.conf.
+# (An ~/.config/autostart/ entry would be dead weight — Hyprland never activates
+# xdg-desktop-autostart.target, so those entries don't run.) The upgrade leaves the
+# old enable symlink behind, dangling.
+- name: Remove the dropped arch-update-tray.service enable symlink
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/graphical-session.target.wants/arch-update-tray.service"
+    state: absent
+
 # Enables (no become; uses the connor user's session manager). wallpaper-cycle.timer
 # was just (re)deployed above, so reload the user daemon before enabling it.
 - name: Enable user timers and services
@@ -43,5 +55,4 @@
     daemon_reload: "{{ item.reload | default(false) }}"
   loop:
     - { name: arch-update.timer }
-    - { name: arch-update-tray.service }
     - { name: wallpaper-cycle.timer, reload: true }
