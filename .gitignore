@@ -1,2 +1,3 @@
 .ansible
 notes/local/
+system/files/immich/.env

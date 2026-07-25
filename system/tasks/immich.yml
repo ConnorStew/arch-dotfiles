@@ -1,0 +1,46 @@
+---
+# Immich photo server, run as a docker-compose stack via a systemd unit.
+- name: Check the immich .env exists
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/files/immich/.env"
+  register: immich_env
+  when: deploy_immich | default(false)
+
+- name: Fail early if the immich .env is missing
+  ansible.builtin.assert:
+    that: immich_env.stat.exists
+    fail_msg: >-
+      {{ playbook_dir }}/files/immich/.env is missing. It is gitignored (it
+      holds DB_PASSWORD), so a fresh clone must recreate it from
+      https://github.com/immich-app/immich/releases/latest/download/example.env
+      before immich.service can start.
+  when: deploy_immich | default(false)
+
+- name: Enable docker service
+  ansible.builtin.systemd_service:
+    name: docker.service
+    enabled: true
+    state: started
+  become: true
+  when: deploy_immich | default(false)
+
+- name: Copy immich unit
+  ansible.builtin.copy:
+    src: files/immich/immich.service
+    dest: /etc/systemd/system/immich.service
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+  notify: Reload systemd
+  when: deploy_immich | default(false)
+
+- name: Enable immich service
+  ansible.builtin.systemd_service:
+    name: immich.service
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: true
+  when: deploy_immich | default(false)

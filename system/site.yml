@@ -39,6 +39,9 @@
       ansible.builtin.import_tasks: tasks/claude-remote-control.yml
     - name: Packages (native/AUR/flatpak/npm)
       ansible.builtin.import_tasks: tasks/packages.yml
+    # After packages.yml - needs docker/docker-compose installed.
+    - name: Immich photo server
+      ansible.builtin.import_tasks: tasks/immich.yml
     - name: User-level config (ssh perms, user units)
       ansible.builtin.import_tasks: tasks/user-config.yml
     - name: Enable tailscale
