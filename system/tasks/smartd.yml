@@ -1,0 +1,49 @@
+---
+- name: Ensure smartd state directory exists
+  ansible.builtin.file:
+    path: /var/lib/smartmontools
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
+- name: Copy smartd config
+  ansible.builtin.copy:
+    src: files/smartd.conf
+    dest: /etc/smartd.conf
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+  notify: Restart smartd
+
+- name: Copy smartd daemon args (persistent state across reboots)
+  ansible.builtin.copy:
+    src: files/smartd.conf.d
+    dest: /etc/conf.d/smartd
+    owner: root
+    group: root
+    mode: "0644"
+    follow: false
+  become: true
+  notify: Restart smartd
+
+- name: Copy smartd notification script
+  ansible.builtin.copy:
+    src: files/smartd-notify
+    dest: /usr/local/bin/smartd-notify
+    owner: root
+    group: root
+    mode: "0755"
+    follow: false
+  become: true
+  notify: Restart smartd
+
+- name: Enable smartd
+  ansible.builtin.systemd_service:
+    name: smartd.service
+    enabled: true
+    state: started
+  become: true

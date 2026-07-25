@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Called by smartd (as root) via `-M exec`. smartd passes details in the
+# environment; SMARTD_DEVICESTRING and SMARTD_MESSAGE are the ones worth showing.
+set -u
+
+user=connor
+uid=$(id -u "$user")
+
+# Always log first — if nobody is logged in, the desktop notification goes
+# nowhere and this journal line is the only record that smartd fired.
+logger -t smartd-notify "${SMARTD_DEVICESTRING:-unknown}: ${SMARTD_MESSAGE:-no message}"
+
+# smartd runs as root, so reach into the user's session bus explicitly.
+runuser -u "$user" -- env "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus" \
+  notify-send -u critical \
+  "SMART: ${SMARTD_DEVICESTRING:-unknown}" \
+  "${SMARTD_MESSAGE:-no message}" 2>/dev/null || true

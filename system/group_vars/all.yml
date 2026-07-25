@@ -70,6 +70,7 @@ packages_common:
   - reflector
   - rsync
   - sddm
+  - smartmontools
   - sshpass
   - steam
   - stow
