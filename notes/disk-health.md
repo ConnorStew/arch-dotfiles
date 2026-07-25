@@ -15,7 +15,7 @@ Identify a disk (kernel names move between reboots):
 
 ```bash
 sudo smartctl -i /dev/sdX          # model, serial, firmware
-lsblk -o NAME,SIZE,MODEL,MOUNTPOINTS
+lsblk -o NAME,SIZE,MODEL,MOUNTPOINTS,LABEL
 ```
 
 Self-tests — non-destructive, run on the drive itself, safe to keep using the
