@@ -33,6 +33,8 @@
       ansible.builtin.import_tasks: tasks/reflector.yml
     - name: SMART disk monitoring
       ansible.builtin.import_tasks: tasks/smartd.yml
+    - name: Timeshift snapshot location
+      ansible.builtin.import_tasks: tasks/timeshift.yml
     - name: Claude remote-control (user service)
       ansible.builtin.import_tasks: tasks/claude-remote-control.yml
     - name: Packages (native/AUR/flatpak/npm)

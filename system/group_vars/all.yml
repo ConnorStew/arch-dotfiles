@@ -14,6 +14,10 @@ claude_remote_control_enabled: false
 # still need approval in the Tailscale admin console before they actually route.
 tailscale_advertise_routes: ""
 
+# Mount point whose filesystem holds Timeshift snapshots (tasks/timeshift.yml).
+# Keeps them off the small root partition. Set to "/" to restore the default.
+timeshift_backup_mount: /home
+
 # --- Packages --------------------------------------------------------------
 # These vars are the source of truth (packages/dump.sh is gone). `system/scripts/check-drift.py`
 # diffs them against what's actually installed. Add host-only packages to

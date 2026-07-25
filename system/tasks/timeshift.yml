@@ -1,0 +1,50 @@
+---
+# Store Timeshift snapshots on a filesystem other than root.
+#
+# Timeshift defaults to the device holding `/`, where a couple of rsync
+# snapshots are enough to fill a root partition. Pointing `backup_device_uuid`
+# at the /home filesystem moves that growth onto the partition with room for it.
+- name: Look up the Timeshift backup filesystem
+  ansible.builtin.set_fact:
+    timeshift_backup: >-
+      {{ ansible_facts.mounts
+         | selectattr('mount', 'eq', timeshift_backup_mount)
+         | list | first | default({}) }}
+
+- name: Check for an existing Timeshift config
+  ansible.builtin.stat:
+    path: /etc/timeshift/timeshift.json
+  register: timeshift_config
+  become: true
+
+# Only present after Timeshift's first run.
+- name: Read current Timeshift config
+  ansible.builtin.slurp:
+    src: /etc/timeshift/timeshift.json
+  register: timeshift_config_raw
+  when: timeshift_config.stat.exists
+  become: true
+
+- name: Parse current Timeshift config
+  ansible.builtin.set_fact:
+    timeshift_settings: "{{ timeshift_config_raw.content | b64decode | from_json }}"
+  when: timeshift_config.stat.exists
+
+# Guarded on the parsed value rather than rewriting every run: Timeshift itself
+# rewrites this file (snapshot_size/snapshot_count) in its own formatting, so an
+# unconditional copy would report changed on every play.
+- name: Point Timeshift at {{ timeshift_backup_mount }}
+  ansible.builtin.copy:
+    content: |
+      {{ timeshift_settings
+         | combine({'backup_device_uuid': timeshift_backup.uuid})
+         | to_nice_json }}
+    dest: /etc/timeshift/timeshift.json
+    owner: root
+    group: root
+    mode: "0644"
+  when:
+    - timeshift_config.stat.exists
+    - timeshift_backup.uuid is defined
+    - timeshift_settings.backup_device_uuid != timeshift_backup.uuid
+  become: true
