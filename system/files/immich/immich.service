@@ -3,6 +3,7 @@ Description=Immich
 Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
+RequiresMountsFor=/mnt/home-media
 
 [Service]
 Type=oneshot
