@@ -23,6 +23,8 @@
           --limit "$(uname -n)".
         success_msg: "Scaffolding OK for {{ inventory_hostname }}."
 
+    - name: Packages (native/AUR/flatpak/npm)
+      ansible.builtin.import_tasks: tasks/packages.yml
     - name: SDDM display manager
       ansible.builtin.import_tasks: tasks/sddm.yml
     - name: Xone Xbox adapter
@@ -37,9 +39,6 @@
       ansible.builtin.import_tasks: tasks/timeshift.yml
     - name: Claude remote-control (user service)
       ansible.builtin.import_tasks: tasks/claude-remote-control.yml
-    - name: Packages (native/AUR/flatpak/npm)
-      ansible.builtin.import_tasks: tasks/packages.yml
-    # After packages.yml - needs docker/docker-compose installed.
     - name: Immich photo server
       ansible.builtin.import_tasks: tasks/immich.yml
     - name: User-level config (ssh perms, user units)
